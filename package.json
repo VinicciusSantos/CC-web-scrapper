@@ -2,10 +2,10 @@
   "name": "unip-web-scrapper",
   "version": "1.0.0",
   "description": "Programa para baixar automaticamente todos os arquivos disponíveis na plataforma online da faculdade UNIP (Universidade Paulista). Este código foi desenvolvido para facilitar o processo de obtenção de materiais de estudo, como slides, apostilas, exercícios, entre outros, disponibilizados pelos professores no sistema online da UNIP.",
-  "main": "index.ts",
+  "main": "src/main.ts",
   "scripts": {
-    "start": "tsc && node dist/index.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+    "start": "tsc && node dist/main.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/main.ts"
   },
   "keywords": [],
   "author": "",
