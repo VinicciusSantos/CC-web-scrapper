@@ -7,3 +7,10 @@ O UNIP Web Scraper possui as seguintes funcionalidades:
 - Navegar pelas disciplinas e unidades curriculares do curso do usuário.
 - Baixar automaticamente todos os arquivos disponíveis em cada disciplina/unidade curricular.
 - Organizar os arquivos baixados em pastas de acordo com a estrutura da plataforma UNIP.
+
+
+# Instruções para pré-instalação
+1. Instale o chromium web-driver
+```bash
+sudo apt install chromium-chromedriver
+```

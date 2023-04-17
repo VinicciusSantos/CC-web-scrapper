@@ -1,4 +1,4 @@
-export const BASE_URL = "https://ava.ead.unip.br/webapps"
+export const UNIP_BASE_URL = "https://ava.ead.unip.br/webapps"
 
 export enum Pages {
   LOGIN = `/login`,
