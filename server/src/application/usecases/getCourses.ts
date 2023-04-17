@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
 import axios from 'axios';
 import cheerio from 'cheerio';
 
-import Course from '../entities/courses';
-import { Pages, UNIP_BASE_URL } from '../entities/pages';
+import Course from '../../../../entities/courses';
+import { Pages, UNIP_BASE_URL } from '../../../../entities/pages';
 
 const AxiosInstance = axios.create({ baseURL: UNIP_BASE_URL });
 
-@Injectable({
-  providedIn: 'root',
-})
 export default class GetCoursesUsecase {
   public async execute(): Promise<Course[]> {
     const allCoursesPage = await AxiosInstance.get(Pages.ALL_COURSES);
