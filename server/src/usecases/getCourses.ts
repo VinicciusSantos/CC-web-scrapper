@@ -9,7 +9,6 @@ export default class GetCoursesUsecase {
 
   public async execute(): Promise<Course[]> {
     const allCoursesPage = await AxiosInstance.get(Pages.ALL_COURSES);
-    console.log(AxiosInstance.defaults.headers)
     const $ = cheerio.load(allCoursesPage.data);
     const courses = $("#column0 .courseListing > li > a");
     return Object.values(courses)

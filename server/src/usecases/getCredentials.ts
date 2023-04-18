@@ -1,14 +1,14 @@
-import { Builder, By, IWebDriverCookie, WebDriver } from 'selenium-webdriver';
-import { Options as ChromeOptions } from 'selenium-webdriver/chrome';
+import { Builder, By, IWebDriverCookie, WebDriver } from "selenium-webdriver";
+import { Options as ChromeOptions } from "selenium-webdriver/chrome";
 
-import { FormField, loginUnipFields } from '../../../entities/formFields';
-import { Pages, UNIP_BASE_URL } from '../../../entities/pages';
+import { FormField, loginUnipFields } from "../../../entities/formFields";
+import { Pages, UNIP_BASE_URL } from "../../../entities/pages";
 
 export default class GetCredentialsUsecase {
   private formFields: Record<loginUnipFields, FormField> = {
-    userId: { id: 'user_id' },
-    password: { id: 'password' },
-    submitButton: { id: 'entry-login', isSubmitButton: true },
+    userId: { id: "user_id" },
+    password: { id: "password" },
+    submitButton: { id: "entry-login", isSubmitButton: true },
   };
 
   constructor() {}
@@ -30,7 +30,7 @@ export default class GetCredentialsUsecase {
   private async configureWebDriver(): Promise<WebDriver> {
     const options = new ChromeOptions();
     const builder = new Builder()
-      .forBrowser('chrome')
+      .forBrowser("chrome")
       .setChromeOptions(options)
       .build();
     await builder.get(UNIP_BASE_URL);
@@ -49,7 +49,8 @@ export default class GetCredentialsUsecase {
   private async checkIfLoginWasSuccessful(driver: WebDriver) {
     const url = await driver.getCurrentUrl();
     if (!url.includes(Pages.HOME)) {
-      throw new Error('Invalid Login Credentials!');
+      driver.quit();
+      throw new Error("Invalid Login Credentials!");
     }
   }
 
@@ -58,7 +59,7 @@ export default class GetCredentialsUsecase {
     const formattedCookies: string = cookies
       .reduce((acc: string, cookie: IWebDriverCookie) => {
         return acc + `${cookie.name} = ${cookie.value}; `;
-      }, '')
+      }, "")
       .trim();
     return formattedCookies;
   }

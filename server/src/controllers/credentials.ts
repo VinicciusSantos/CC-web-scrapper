@@ -3,13 +3,17 @@ import GetCredentialsUsecase from "../usecases/getCredentials";
 
 class CredentialsController {
   public async getCredentials(req: Request, res: Response) {
-    const { userId, password } = req.body;
-    const credentials = await new GetCredentialsUsecase().execute(
-      userId,
-      password
-    );
-    res.cookie("credentials", credentials);
-    return res.status(204).end()
+    try {
+      const { userId, password } = req.body;
+      const credentials = await new GetCredentialsUsecase().execute(
+        userId,
+        password
+      );
+      res.cookie("credentials", credentials);
+      return res.status(204).end();
+    } catch (error: any) {
+      return res.status(400).json({ msg: error.message });
+    }
   }
 }
 
