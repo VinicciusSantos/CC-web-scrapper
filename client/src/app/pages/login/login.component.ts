@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { take, tap } from 'rxjs';
+import AuthRepository from 'src/app/repositories/auth-repository/authRepository.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +15,7 @@ export class LoginComponent {
     password: new FormControl(''),
   });
 
-  constructor() {}
+  constructor(private authRepository: AuthRepository) {}
 
   public get inputType(): string {
     return this.showPassword ? 'text' : 'password';
@@ -24,6 +26,9 @@ export class LoginComponent {
   }
 
   public onSubmit(): void {
-    console.log(this.loginForm.value);
+    this.authRepository.login(this.loginForm.value).pipe(
+      take(1),
+      tap((a) => console.log(a))
+    );
   }
 }
