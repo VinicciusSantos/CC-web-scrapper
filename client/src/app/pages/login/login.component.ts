@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { take, tap } from 'rxjs';
-import AuthRepository from 'src/app/repositories/auth-repository/authRepository.service';
+import AuthRepository from '../../repositories/auth-repository/authRepository.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,7 @@ export class LoginComponent {
     password: new FormControl(''),
   });
 
-  constructor(private authRepository: AuthRepository) {}
+  constructor(private authRepository: AuthRepository, private router: Router) {}
 
   public get inputType(): string {
     return this.showPassword ? 'text' : 'password';
@@ -26,9 +26,12 @@ export class LoginComponent {
   }
 
   public onSubmit(): void {
-    this.authRepository.login(this.loginForm.value).pipe(
-      take(1),
-      tap((a) => console.log(a))
-    );
+    this.authRepository.login(this.loginForm.value).subscribe((res) => {
+      this.router.navigate(['/home']);
+      console.log(
+        '🚀 ~ file: login.component.ts:32 ~ LoginComponent ~ .subscribe ~ res:',
+        res
+      );
+    });
   }
 }

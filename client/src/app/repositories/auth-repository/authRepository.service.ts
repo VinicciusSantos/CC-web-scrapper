@@ -10,6 +10,8 @@ export default class AuthRepository {
   constructor(private http: HttpClient) {}
 
   public login(loginInput: any): Observable<any> {
-    return this.http.post(`${API_PATH}/credentials`, loginInput);
+    return this.http.post(`${API_PATH}/credentials`, loginInput, {
+      observe: 'response',
+    }) as Observable<any>;
   }
 }

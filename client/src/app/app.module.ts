@@ -6,7 +6,9 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import AuthInterceptor from './infra/http/AuthInterceptor.service';
 
 @NgModule({
   declarations: [
@@ -20,8 +22,15 @@ import { HttpClientModule } from '@angular/common/http';
     NbLayoutModule,
     NbEvaIconsModule,
     HttpClientModule,
+    RouterModule,
   ],
-  providers: [],
+  providers: [
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true,
+    }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
