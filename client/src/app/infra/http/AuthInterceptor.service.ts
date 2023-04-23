@@ -15,6 +15,7 @@ export default class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    console.log('interceptado')
     request = request.clone({
       withCredentials: true,
     });
