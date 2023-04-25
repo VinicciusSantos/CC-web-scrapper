@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, take } from 'rxjs';
 import CoursesRepository from 'src/app/repositories/courses-repository/coursesRepository.service';
 import Course from '../../../../../entities/courses';
 
@@ -9,9 +9,12 @@ import Course from '../../../../../entities/courses';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  public courses$: Observable<Course[]> = of([]);
+  public courses: Course[] = [];
 
   constructor(private coursesRepository: CoursesRepository) {
-    this.courses$ = this.coursesRepository.getAllCourses();
+    this.coursesRepository
+      .getAllCourses()
+      .pipe(take(1))
+      .subscribe((res) => (this.courses = res.data.courses));
   }
 }
