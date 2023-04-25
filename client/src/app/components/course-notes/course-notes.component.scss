@@ -1,0 +1,22 @@
+table {
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  border-collapse: separate;
+  border: solid #192038 1px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+
+  td {
+    padding: 5px;
+    font-weight: normal;
+}
+
+th {
+      font-weight: bold;
+    text-align: center;
+    padding: 5px;
+  }
+}

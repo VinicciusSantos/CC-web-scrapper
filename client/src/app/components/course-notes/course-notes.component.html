@@ -1,0 +1,33 @@
+<table [nbTreeGrid]="dataSource">
+  <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+  <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+
+  <ng-container [nbTreeGridColumnDef]="customColumn">
+    <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+      {{ customColumn }}
+    </th>
+    <td nbTreeGridCell *nbTreeGridCellDef="let row">
+      {{ row.data[customColumn] }}
+    </td>
+  </ng-container>
+
+  <ng-container
+    *ngFor="let column of defaultColumns; let index = index"
+    [nbTreeGridColumnDef]="column"
+    [showOn]="getShowOn(index)"
+  >
+    <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+      {{ column }}
+    </th>
+    <td nbTreeGridCell *nbTreeGridCellDef="let row">
+      <nb-icon
+        *ngIf="column === 'concluido'"
+        [icon]="row.data[column] ? 'checkmark-circle-2' : 'close-circle'"
+        [status]="row.data[column] ? 'success' : 'danger'"
+      ></nb-icon>
+      <span *ngIf="column !== 'concluido'">
+        {{ row.data[column] || "-" }}
+      </span>
+    </td>
+  </ng-container>
+</table>
