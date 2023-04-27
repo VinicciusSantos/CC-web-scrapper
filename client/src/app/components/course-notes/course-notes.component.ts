@@ -4,13 +4,7 @@ import {
   NbTreeGridDataSourceBuilder,
 } from '@nebular/theme';
 
-interface TreeNode<T> {
-  data: T;
-  children?: TreeNode<T>[];
-  expanded?: boolean;
-}
-
-interface FSEntry {
+interface NotesTableRow {
   unidade: string;
   media: number;
   tentativas: number;
@@ -27,28 +21,28 @@ export class CourseNotesComponent {
   defaultColumns = ['media', 'tentativas', 'concluido'];
   allColumns = [this.customColumn, ...this.defaultColumns];
 
-  dataSource: NbTreeGridDataSource<FSEntry>;
+  dataSource: NbTreeGridDataSource<NotesTableRow>;
 
-  constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>) {
-    this.dataSource = this.dataSourceBuilder.create(this.data);
+  constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<NotesTableRow>) {
+    this.dataSource = this.dataSourceBuilder.create(
+      this.data.map((data) => {
+        return { data };
+      })
+    );
   }
 
-  private data: TreeNode<FSEntry>[] = [
+  private data: NotesTableRow[] = [
     {
-      data: {
-        unidade: 'Unidade 1',
-        media: 4.5,
-        concluido: false,
-        tentativas: 2,
-      },
+      unidade: 'Unidade 1',
+      media: 4.5,
+      concluido: false,
+      tentativas: 2,
     },
     {
-      data: {
-        unidade: 'Unidade 2',
-        media: 8.0,
-        concluido: true,
-        tentativas: 3,
-      },
+      unidade: 'Unidade 2',
+      media: 8.0,
+      concluido: true,
+      tentativas: 3,
     },
   ];
 

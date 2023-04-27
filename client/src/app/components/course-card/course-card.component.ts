@@ -9,9 +9,9 @@ import Course from '../../../../../entities/courses';
 })
 export class CourseCardComponent implements OnInit {
   @Input() course!: Course;
-
   
   public ngOnInit(): void {
-    this.course = new Course(this.course.name, this.course.url);
+    console.log("🚀 ~ file: course-card.component.ts:12 ~ CourseCardComponent ~ course:", this.course)
+
   }
 }

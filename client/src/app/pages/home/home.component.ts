@@ -17,7 +17,9 @@ export class HomeComponent {
       .getAllCourses()
       .pipe(take(1))
       .subscribe((res) => {
-        this.courses = res.data.courses;
+        this.courses = res.data.courses.map(
+          (c) => new Course(c.fullName, c.url)
+        );
         this.loading = false;
       });
   }
