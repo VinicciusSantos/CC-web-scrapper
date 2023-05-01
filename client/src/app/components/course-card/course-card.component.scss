@@ -7,6 +7,15 @@
     background-color: #222b45;
     padding: 10px;
     border-radius: 10px;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        height: min-content;
+      }
+    }
   }
 
   &.__title {

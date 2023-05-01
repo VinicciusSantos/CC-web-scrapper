@@ -33,7 +33,8 @@ export class CourseNotesComponent implements OnInit {
     return minWithForMultipleColumns + nextColumnStep * index;
   }
 
-  private getGradesData(): void {
+  public getGradesData(): void {
+    this.clearGradesData();
     this.coursesRepository
       .getCourseGrades(this.course)
       .pipe(take(1))
@@ -49,6 +50,11 @@ export class CourseNotesComponent implements OnInit {
         );
         this.buildTable();
       });
+  }
+
+  public clearGradesData(): void {
+    this.data = [];
+    this.buildTable();
   }
 
   private buildTable(): void {
