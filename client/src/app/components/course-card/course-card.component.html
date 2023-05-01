@@ -1,4 +1,9 @@
-<div class="course-card__container" *ngIf="course">
+<div
+  class="course-card__container"
+  *ngIf="course"
+  [nbSpinner]="loading"
+  nbSpinnerStatus="danger"
+>
   <header>
     <h3 class="course-card__title">{{ course.name }}</h3>
     <button
@@ -6,7 +11,7 @@
       status="danger"
       size="tiny"
       shape="round"
-      (click)="onReload()"
+      (click)="onReloadData()"
     >
       <nb-icon icon="refresh"></nb-icon>
     </button>
@@ -15,10 +20,8 @@
     <strong>Turma</strong>: {{ course.code }}
   </span>
 
-  <app-course-notes [course]="course"></app-course-notes>
-
-  <!-- <div class="actions">
-    <button nbButton hero shape="semi-round" status="info">Ver Notas</button>
-    <button nbButton hero shape="semi-round" status="info">Info</button>
-  </div> -->
+  <app-course-notes
+    [course]="course"
+    (loadingState)="onChangeLoadingState($event)"
+  ></app-course-notes>
 </div>

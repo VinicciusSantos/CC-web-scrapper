@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   NbTreeGridDataSource,
   NbTreeGridDataSourceBuilder,
@@ -15,12 +15,14 @@ import { take } from 'rxjs';
 })
 export class CourseNotesComponent implements OnInit {
   @Input() public course!: Course;
+  @Output() public loadingState = new EventEmitter<boolean>();
 
+  public loading = false;
   public customColumn = 'unidade';
   public defaultColumns = ['media', 'tentativas', 'concluido'];
   public allColumns = [this.customColumn, ...this.defaultColumns];
   public dataSource!: NbTreeGridDataSource<NotesTableRow>;
-  private data: NotesTableRow[] = [];
+  public data: NotesTableRow[] = [];
 
   constructor(
     private coursesRepository: CoursesRepository,
@@ -33,8 +35,14 @@ export class CourseNotesComponent implements OnInit {
     return minWithForMultipleColumns + nextColumnStep * index;
   }
 
+  public changeLoadingState(newState: boolean): void {
+    this.loading = newState;
+    this.loadingState.emit(newState);
+  }
+
   public getGradesData(): void {
     this.clearGradesData();
+    this.changeLoadingState(true);
     this.coursesRepository
       .getCourseGrades(this.course)
       .pipe(take(1))
@@ -49,6 +57,7 @@ export class CourseNotesComponent implements OnInit {
             )
         );
         this.buildTable();
+        this.changeLoadingState(false);
       });
   }
 
@@ -63,6 +72,10 @@ export class CourseNotesComponent implements OnInit {
         return { data };
       })
     );
+  }
+
+  public get showEmptyStateImage(): boolean {
+    return !this.loading && this.data.length === 0;
   }
 
   public ngOnInit(): void {

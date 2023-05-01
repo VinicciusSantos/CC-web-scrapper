@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 
 import Course from '../../../../../entities/courses';
 import { CourseNotesComponent } from '../course-notes/course-notes.component';
@@ -8,15 +8,18 @@ import { CourseNotesComponent } from '../course-notes/course-notes.component';
   templateUrl: './course-card.component.html',
   styleUrls: ['./course-card.component.scss'],
 })
-export class CourseCardComponent implements OnInit {
-  @Input() course!: Course;
+export class CourseCardComponent {
+  @Input() public course!: Course;
+  public loading = false;
 
   @ViewChild(CourseNotesComponent)
   private courseNotesComponent!: CourseNotesComponent;
 
-  public onReload(): void {
+  public onReloadData(): void {
     this.courseNotesComponent.getGradesData();
   }
 
-  public ngOnInit(): void {}
+  public onChangeLoadingState(newState: boolean) {
+    this.loading = newState;
+  }
 }

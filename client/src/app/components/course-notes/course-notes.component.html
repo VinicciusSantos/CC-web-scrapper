@@ -31,3 +31,12 @@
     </td>
   </ng-container>
 </table>
+
+<div *ngIf="showEmptyStateImage" class="empty-state-image">
+  <img
+    src="https://cdn0.iconfinder.com/data/icons/empty-state-vol-1-flat/64/16_empty_box_state_package_no_data_nothing-512.png"
+    alt="no-data"
+    height="150px"
+  />
+  <span>[ Dados Indisponíveis ]</span>
+</div>
