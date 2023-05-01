@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable, of, take } from 'rxjs';
 import CoursesRepository from 'src/app/repositories/courses-repository/coursesRepository.service';
 import Course from '../../../../../entities/courses';
@@ -8,19 +8,24 @@ import Course from '../../../../../entities/courses';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   public courses: Course[] = [];
   public loading = true;
 
-  constructor(private coursesRepository: CoursesRepository) {
+  constructor(private coursesRepository: CoursesRepository) {}
+
+  public ngOnInit(): void {
     this.coursesRepository
       .getAllCourses()
       .pipe(take(1))
       .subscribe((res) => {
+        if (!res.data) return;
         this.courses = res.data.courses.map(
           (c) => new Course(c.fullName, c.url)
         );
         this.loading = false;
+        console.log("🚀 ~ file: home.component.ts:30 ~ HomeComponent ~ ngOnInit ~ this.courses:", this.courses)
       });
+
   }
 }
