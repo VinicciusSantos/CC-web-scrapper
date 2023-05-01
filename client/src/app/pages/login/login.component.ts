@@ -28,10 +28,6 @@ export class LoginComponent {
   public onSubmit(): void {
     this.authRepository.login(this.loginForm.value).subscribe((res) => {
       this.router.navigate(['/home']);
-      console.log(
-        '🚀 ~ file: login.component.ts:32 ~ LoginComponent ~ .subscribe ~ res:',
-        res
-      );
     });
   }
 }

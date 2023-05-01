@@ -23,7 +23,7 @@ export default class Course {
   private getId(): string {
     return (
       this.url.slice(
-        this.url.indexOf("id=_") + 5,
+        this.url.indexOf("id=_") + 4,
         this.url.indexOf("id=_") + 12
       ) || ""
     );

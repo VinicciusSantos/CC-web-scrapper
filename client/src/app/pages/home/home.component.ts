@@ -24,8 +24,6 @@ export class HomeComponent implements OnInit {
           (c) => new Course(c.fullName, c.url)
         );
         this.loading = false;
-        console.log("🚀 ~ file: home.component.ts:30 ~ HomeComponent ~ ngOnInit ~ this.courses:", this.courses)
       });
-
   }
 }

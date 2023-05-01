@@ -8,26 +8,39 @@ export default class GetGradesFromCourseUsecase {
   constructor() {}
 
   public async execute(courseId: string): Promise<NotesTableRow[]> {
-    console.log("🚀 ~ file: getGradesFromCourse.ts:11 ~ GetGradesFromCourseUsecase ~ execute ~ courseId:", courseId)
-    const allCoursesPage = await AxiosInstance.get(
-      Pages.COURSE_GRADES + courseId
-    ).catch(e => {
-      console.log(Object.values(e))
-    })
-    // const $ = cheerio.load(allCoursesPage.data);
-    return [
-      {
-        unidade: "Unidade 1",
-        media: 4.5,
-        concluido: false,
-        tentativas: 2,
-      },
-      {
-        unidade: "Unidade 2",
-        media: 8.0,
-        concluido: true,
-        tentativas: 3,
-      },
-    ];
+    const pageURL = Pages.COURSE_GRADES + courseId;
+    const gradesPage = await AxiosInstance.get(pageURL);
+    const $ = cheerio.load(gradesPage.data);
+    const rows = this.getTableRows($);
+    let grades = rows.map((row) => this.parseRow($, row));
+    return this.sortGrades(grades);
+  }
+
+  private getTableRows($: cheerio.Root) {
+    return $(".graded_item_row")
+      .toArray()
+      .filter((row) => $(row).find("a").length > 0);
+  }
+
+  private parseRow($: cheerio.Root, row: any) {
+    const unidade = $(row).find("a").first().text().trim();
+    const grade = $(row).find(".grade").text().trim();
+    const pointsPossible = $(row).find(".pointsPossible").text().trim();
+    const media = this.calculateMedia(grade, pointsPossible);
+    const tentativas = 0;
+    const concluido = true;
+    return { unidade, media, tentativas, concluido };
+  }
+
+  private calculateMedia(grade: string, pointsPossible: string) {
+    const media = `${grade.slice(
+      0,
+      Math.min(grade.indexOf("/"), 4)
+    )}${pointsPossible}`;
+    return media;
+  }
+
+  private sortGrades(grades: NotesTableRow[]): NotesTableRow[] {
+    return grades.sort((a, b) => a.unidade.localeCompare(b.unidade));
   }
 }
