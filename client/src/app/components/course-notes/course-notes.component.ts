@@ -19,7 +19,7 @@ export class CourseNotesComponent implements OnInit {
 
   public loading = false;
   public customColumn = 'unidade';
-  public defaultColumns = ['media', 'tentativas', 'concluido'];
+  public defaultColumns = ['media', 'concluido'];
   public allColumns = [this.customColumn, ...this.defaultColumns];
   public dataSource!: NbTreeGridDataSource<NotesTableRow>;
   public data: NotesTableRow[] = [];
@@ -52,7 +52,6 @@ export class CourseNotesComponent implements OnInit {
             new NotesTableRow(
               grade.unidade,
               grade.media,
-              grade.tentativas,
               grade.concluido
             )
         );
