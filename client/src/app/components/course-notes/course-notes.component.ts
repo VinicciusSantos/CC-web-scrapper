@@ -18,8 +18,8 @@ export class CourseNotesComponent implements OnInit {
   @Output() public loadingState = new EventEmitter<boolean>();
 
   public loading = false;
-  public customColumn = 'unidade';
-  public defaultColumns = ['media', 'concluido'];
+  public customColumn = 'item';
+  public defaultColumns = ['nota', 'concluido'];
   public allColumns = [this.customColumn, ...this.defaultColumns];
   public dataSource!: NbTreeGridDataSource<NotesTableRow>;
   public data: NotesTableRow[] = [];
@@ -50,8 +50,8 @@ export class CourseNotesComponent implements OnInit {
         this.data = res.data.grades.map(
           (grade) =>
             new NotesTableRow(
-              grade.unidade,
-              grade.media,
+              grade.item,
+              grade.nota,
               grade.concluido
             )
         );

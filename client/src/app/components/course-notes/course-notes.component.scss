@@ -25,7 +25,29 @@ table {
     font-weight: bold;
     text-align: center;
     padding: 5px;
-    background-color: #151A30 !important;
+    background-color: #151A30;
+  }
+
+  tr:nth-of-type(odd) {
+    background-color: #151a3040;
+  }
+
+  td.nb-column-item {
+    text-align: start;
+    padding: 0 10px;
+  }
+
+  th.nb-column-nota {
+    width: 100px;
+  }
+
+  th.nb-column-concluido {
+    width: 100px;
+  }
+
+  tr:last-child td {
+    font-weight: bold;
+    background-color: #1f2748;
   }
 }
 

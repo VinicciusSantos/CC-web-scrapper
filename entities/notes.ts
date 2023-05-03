@@ -1,7 +1,7 @@
 export class NotesTableRow {
   constructor(
-    public unidade: string,
-    public media: string | null,
+    public item: string,
+    public nota: string | null,
     public concluido?: boolean
   ) {}
 }

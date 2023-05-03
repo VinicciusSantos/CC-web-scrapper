@@ -1,8 +1,7 @@
-import { NotesTableRow } from "./../../../entities/notes";
 import cheerio from "cheerio";
-
-import { Pages } from "../../../entities/pages";
 import { AxiosInstance } from "../axios";
+import { NotesTableRow } from "../../../entities/notes";
+import { Pages } from "../../../entities/pages";
 
 export default class GetGradesFromCourseUsecase {
   constructor() {}
@@ -11,42 +10,58 @@ export default class GetGradesFromCourseUsecase {
     const pageURL = Pages.COURSE_GRADES + courseId;
     const gradesPage = await AxiosInstance.get(pageURL);
     const $ = cheerio.load(gradesPage.data);
-    const finishedRows = this.getFinisheditemsRows($);
-    const unfinishedRows = this.getUnfinisheditemsRows($);
-    let grades = [...finishedRows, ...unfinishedRows];
-    return this.sortGrades(grades);
+    const finishedRows = this.getGradedItemsRows($);
+    const unfinishedRows = this.getUpcomingItemsRows($);
+    const grades = [...this.sortGrades([...finishedRows, ...unfinishedRows])];
+    const totalGradesRow = this.getTotalGradesRow($, grades);
+    return [...grades, totalGradesRow];
   }
 
-  private getFinisheditemsRows($: cheerio.Root) {
+  private getGradedItemsRows($: cheerio.Root): NotesTableRow[] {
     return $(".graded_item_row")
       .toArray()
       .map((row) => this.parseRow($, row, true));
   }
 
-  private getUnfinisheditemsRows($: cheerio.Root) {
+  private getUpcomingItemsRows($: cheerio.Root): NotesTableRow[] {
     return $(".upcoming_item_row")
       .toArray()
       .map((row) => this.parseRow($, row, false));
   }
 
-  private parseRow($: cheerio.Root, row: any, concluido = false) {
-    const unidade = this.findUnidade($, row);
-    const grade = $(row).find(".grade").text().trim();
-    const media = concluido ? this.calculateMedia($, row, grade) : null;
-    return { unidade, media, concluido };
+  private getTotalGradesRow(
+    $: cheerio.Root,
+    grades: NotesTableRow[]
+  ): NotesTableRow {
+    const row = $(".calculatedRow");
+    const grade = row.find("span.grade").text().trim();
+    const nota = grade === "-" ? null : this.calculateNota($, row, grade);
+    const concluido = grades.every((grade) => grade.concluido);
+    return { item: "Total", nota, concluido };
   }
 
-  private findUnidade($: cheerio.Root, row: any): string {
+  private parseRow(
+    $: cheerio.Root,
+    row: any,
+    finished: boolean
+  ): NotesTableRow {
+    const item = this.findItemName($, row);
+    const grade = $(row).find(".grade").text().trim();
+    const nota = finished ? this.calculateNota($, row, grade) : null;
+    return { item, nota, concluido: finished };
+  }
+
+  private findItemName($: cheerio.Root, row: any): string {
     return $(row).first().children().first().children().first().text().trim();
   }
 
-  private calculateMedia($: cheerio.Root, row: any, grade: string) {
+  private calculateNota($: cheerio.Root, row: any, grade: string): string {
     const pointsPossible = $(row).find(".pointsPossible").text().trim();
-    const media = `${grade.slice(0, 4)}${pointsPossible}`;
-    return media;
+    const nota = `${grade.slice(0, 4)}${pointsPossible}`;
+    return nota.replace("/", " / ");
   }
 
   private sortGrades(grades: NotesTableRow[]): NotesTableRow[] {
-    return grades.sort((a, b) => a.unidade.localeCompare(b.unidade));
+    return grades.sort((a, b) => a.item.localeCompare(b.item));
   }
 }
