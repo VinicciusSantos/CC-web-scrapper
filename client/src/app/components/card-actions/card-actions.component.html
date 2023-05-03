@@ -1,0 +1,24 @@
+<div class="course-card__actions">
+  <button
+    nbTooltip="Download dos arquivos"
+    nbTooltipIcon="download-outline"
+    nbButton
+    status="warning"
+    size="tiny"
+    shape="round"
+    (click)="onDownload.emit()"
+  >
+    <nb-icon icon="download-outline"></nb-icon>
+  </button>
+  <button
+    nbTooltip="Recarregar dados"
+    nbTooltipIcon="refresh"
+    nbButton
+    status="danger"
+    size="tiny"
+    shape="round"
+    (click)="onReload.emit()"
+  >
+    <nb-icon icon="refresh"></nb-icon>
+  </button>
+</div>

@@ -6,16 +6,12 @@
 >
   <header>
     <h3 class="course-card__title">{{ course.name }}</h3>
-    <button
-      nbButton
-      status="danger"
-      size="tiny"
-      shape="round"
-      (click)="onReloadData()"
-    >
-      <nb-icon icon="refresh"></nb-icon>
-    </button>
+    <app-card-actions
+      (onReload)="onReloadData()"
+      (onDownload)="onDownloadData()"
+    ></app-card-actions>
   </header>
+
   <span class="course-card__course-code">
     <strong>Turma</strong>: {{ course.code }}
   </span>

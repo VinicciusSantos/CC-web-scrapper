@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GetAllCoursesReponse, GetCourseGradesReponse } from './interfaces';
+import {
+  DownloadCourseDataReponse,
+  GetAllCoursesReponse,
+  GetCourseGradesReponse,
+} from './interfaces';
 import Course from '../../../../../entities/courses';
 
 export const API_PATH = 'http://localhost:3000';
@@ -19,5 +23,11 @@ export default class CoursesRepository {
     return this.http.get(
       `${API_PATH}/courses/${course.id}/grades`
     ) as GetCourseGradesReponse;
+  }
+
+  public downloadCourseData(course: Course) {
+    return this.http.get(
+      `${API_PATH}/courses/${course.id}/download`
+    ) as DownloadCourseDataReponse;
   }
 }

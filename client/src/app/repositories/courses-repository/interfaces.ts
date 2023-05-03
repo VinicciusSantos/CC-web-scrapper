@@ -11,6 +11,13 @@ export namespace CourseInterfaces {
   export class getCourseGrades {
     public grades!: NotesTableRow[];
   }
+
+  export class downloadCourseData {
+    links!: {
+      url: string;
+      type?: any;
+    }[];
+  }
 }
 
 export type GetAllCoursesReponse = Observable<
@@ -19,4 +26,8 @@ export type GetAllCoursesReponse = Observable<
 
 export type GetCourseGradesReponse = Observable<
   ResponseInterfaces.Get<CourseInterfaces.getCourseGrades>
+>;
+
+export type DownloadCourseDataReponse = Observable<
+  ResponseInterfaces.Get<CourseInterfaces.downloadCourseData>
 >;
