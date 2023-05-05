@@ -12,7 +12,7 @@ const cookieSetterMiddleware = (
       msg: "Faça Login para Continuar!",
     });
   AxiosInstance.defaults.headers.common["Cookie"] = credentials;
-  next();
+  return next();
 };
 
 export default cookieSetterMiddleware;

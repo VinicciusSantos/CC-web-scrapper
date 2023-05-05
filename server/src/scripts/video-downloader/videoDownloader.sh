@@ -1,0 +1,1 @@
+ffmpeg -i "$1" -c copy ~/Documents/$2.mp4
