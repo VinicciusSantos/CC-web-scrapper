@@ -1,46 +1,69 @@
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { spawn } from "child_process";
+import URL from "../../../../entities/URL";
 import { AxiosInstance } from "../../axios";
 import { VideoInfos, VideoSectionInfos } from "./interfaces";
-import URL from "../../../../entities/URL";
-import { AxiosResponse } from "axios";
 
 export default class VideoDownloaderService {
-  private scriptPath = "./videoDownloader.sh";
-
   public receivedUrl!: URL;
+  public redirectedUrl!: URL;
+  private readonly scriptPath = "./videoDownloader.sh";
+  public readonly authAccess =
+    "HHMWqVULA0gtGujnz9J1x2LKTGaZxShrPiHfma1Jafu8QesvlE1RVEBPZZLL1NmIfEGpBFuTFtz6wq5IBTxsR4rTqxDuE4WHfWmV";
 
   constructor() {}
 
   public async download(videoUrl: URL, fileName: string): Promise<void> {
     this.receivedUrl = videoUrl;
-    const manifest = await this.getVideoManifest();
+    const manifest = await this.getVideoManifestURL();
     // this.callDownloadScript()
   }
 
-  private async getVideoManifest(): Promise<string> {
+  private async getVideoManifestURL(): Promise<string> {
     const firstToken = await this.getFirstToken();
-    return "";
+    const secondToken = (await this.getVideoSectionInfos(firstToken)).token;
+    const requestUrl = `https://api.unip.br/sistemas/ava/servico/video/transmissao/${this.videoId}`;
+    const requestConfigs: AxiosRequestConfig = {
+      headers: {
+        Authorization: `Bearer ${secondToken}`,
+        ChavePublica: this.authAccess,
+      },
+    };
+    const videoInfos: AxiosResponse<VideoInfos> = await AxiosInstance.get(
+      requestUrl,
+      requestConfigs
+    );
+    const manifestUrl = videoInfos.data.midias[0].local;
+    return manifestUrl + "(format=m3u8-aapl-v3)";
   }
 
   private async getFirstToken(): Promise<string> {
-    // await AxiosInstance.get(
-    //   `https://ava.ead.unip.br/webapps/unip-unip-bb-BBLEARN/Modulos/player.jsp?u=${this.userId}&d=${this.courseId}&id=${this.videoId}&instituto=ead&referencia=${this.courseReference}`
-    // );
     const requestURL = `https://sistemas.unip.br/centralsistemaservico/playerblack.ashx?u=${this.userId}&d=${this.courseId}&id=${this.videoId}&instituto=ead`;
-    const response = await AxiosInstance.get(requestURL, {
+    const requestConfigs: AxiosRequestConfig = {
       headers: {
         Referer: "https://ava.ead.unip.br/",
+        maxRedirects: 0,
       },
-    });
-    const newVideoURL = response.headers.Location;
-    console.log(
-      "🚀 ~ file: videoDownloader.ts:36 ~ VideoDownloaderService ~ getFirstToken ~ response.headers:",
-      response.headers
-    );
-    const videoSectionInfosResponse: AxiosResponse<VideoSectionInfos> =
-      await AxiosInstance.get(newVideoURL);
-    const videoSectionInfos = videoSectionInfosResponse.data;
-    return `Bearer ${videoSectionInfos.token}`;
+    };
+    const response = await AxiosInstance.get(requestURL, requestConfigs);
+    this.redirectedUrl = new URL(response.request.res.responseUrl);
+    const firstToken = this.redirectedUrl.extractParam("token");
+    return firstToken;
+  }
+
+  private async getVideoSectionInfos(
+    token: string
+  ): Promise<VideoSectionInfos> {
+    const requestURL = `https://api.unip.br/sistemas/ava/servico/autenticacao/token/sepi/${token}`;
+    const requestConfigs: AxiosRequestConfig = {
+      headers: {
+        Authorization: "Bearer",
+        ChavePublica: this.authAccess,
+      },
+    };
+    const videoInfos: AxiosResponse<VideoSectionInfos> =
+      await AxiosInstance.get(requestURL, requestConfigs);
+    return videoInfos.data;
   }
 
   private get videoId(): string {
@@ -53,10 +76,6 @@ export default class VideoDownloaderService {
 
   private get courseId(): string {
     return this.receivedUrl.extractParam("d");
-  }
-
-  private get courseReference(): string {
-    return this.receivedUrl.extractParam("referencia");
   }
 
   private async callDownloadScript(url: string, fileName: string) {
