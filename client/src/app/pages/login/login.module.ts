@@ -2,16 +2,17 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import {
   NbButtonModule,
   NbFormFieldModule,
   NbIconModule,
   NbInputModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
-import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [LoginComponent],
@@ -25,6 +26,7 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
+    NbSpinnerModule,
   ],
   exports: [LoginRoutingModule],
 })

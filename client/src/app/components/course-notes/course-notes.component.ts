@@ -6,7 +6,7 @@ import {
 import { NotesTableRow } from '../../../../../entities/notes';
 import CoursesRepository from 'src/app/repositories/courses-repository/coursesRepository.service';
 import Course from '../../../../../entities/courses';
-import { take } from 'rxjs';
+import { finalize, take } from 'rxjs';
 
 @Component({
   selector: 'app-course-notes',
@@ -45,7 +45,9 @@ export class CourseNotesComponent implements OnInit {
     this.changeLoadingState(true);
     this.coursesRepository
       .getCourseGrades(this.course)
-      .pipe(take(1))
+      .pipe(take(1), finalize(() => {
+        this.changeLoadingState(false);
+      }))
       .subscribe((res) => {
         this.data = res.data.grades.map(
           (grade) =>
@@ -56,7 +58,6 @@ export class CourseNotesComponent implements OnInit {
             )
         );
         this.buildTable();
-        this.changeLoadingState(false);
       });
   }
 

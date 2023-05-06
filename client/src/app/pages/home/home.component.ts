@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of, take } from 'rxjs';
+import { Observable, finalize, of, take } from 'rxjs';
 import CoursesRepository from 'src/app/repositories/courses-repository/coursesRepository.service';
 import Course from '../../../../../entities/courses';
 
@@ -17,13 +17,17 @@ export class HomeComponent implements OnInit {
   public ngOnInit(): void {
     this.coursesRepository
       .getAllCourses()
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        finalize(() => {
+          this.loading = false;
+        })
+      )
       .subscribe((res) => {
         if (!res.data) return;
         this.courses = res.data.courses.map(
           (c) => new Course(c.fullName, c.url)
         );
-        this.loading = false;
       });
   }
 }

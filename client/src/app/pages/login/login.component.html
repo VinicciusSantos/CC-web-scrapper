@@ -3,9 +3,9 @@
     <h2>Login</h2>
 
     <span class="login-page__login-message"
-      >(Use as credenciais do UNIP para fazer Login)</span
+      >(Use as credenciais da UNIP para fazer Login)</span
     >
-    
+
     <form
       class="login-page__form"
       [formGroup]="loginForm"
@@ -40,7 +40,15 @@
         </button>
       </nb-form-field>
 
-      <button fullWidth nbButton hero status="primary">
+      <button
+        fullWidth
+        nbButton
+        hero
+        status="primary"
+        [nbSpinner]="loading"
+        nbSpinnerStatus="primary"
+        [disabled]="loading"
+      >
         <nb-icon icon="log-in-outline"></nb-icon>
         <span>Login</span>
       </button>
