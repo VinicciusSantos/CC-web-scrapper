@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AxiosInstance } from "../axios";
+import { AxiosInstance } from "../infra/http/axios";
 
 const cookieSetterMiddleware = (
   req: Request,

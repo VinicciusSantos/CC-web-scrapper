@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import GetCredentialsUsecase from "../usecases/getCredentials";
+import GetCredentialsUsecase from "../application/usecases/getCredentials";
 import errorHandler from "../application/errors/errorHandler";
 
-class CredentialsController {
+export default class CredentialsController {
   public async getCredentials(req: Request, res: Response) {
     try {
       const { userId, password } = req.body;
@@ -17,5 +17,3 @@ class CredentialsController {
     }
   }
 }
-
-export const credentialsController = new CredentialsController();

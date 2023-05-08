@@ -1,7 +1,7 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { spawn } from "child_process";
 import URL from "../../../../entities/URL";
-import { AxiosInstance } from "../../axios";
+import { AxiosInstance } from "../../infra/http/axios";
 import { VideoInfos, VideoSectionInfos } from "./interfaces";
 
 export default class VideoDownloaderService {

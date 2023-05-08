@@ -1,9 +1,9 @@
 import cheerio from "cheerio";
 
-import Course from "../../../entities/courses";
-import { Pages } from "../../../entities/pages";
-import { AxiosInstance } from "../axios";
-import NotAuthorizedError from "../application/errors/notAuthorized";
+import Course from "../../../../entities/courses";
+import { Pages } from "../../../../entities/pages";
+import { AxiosInstance } from "../../infra/http/axios";
+import NotAuthorizedError from "../errors/notAuthorized";
 
 export default class GetCoursesUsecase {
   constructor() {}
@@ -21,7 +21,7 @@ export default class GetCoursesUsecase {
   }
 
   private isInLoginPage($: cheerio.Root): boolean {
-    const res = $('#loginFormFields')
+    const res = $("#loginFormFields");
     return res.length > 0;
   }
 }

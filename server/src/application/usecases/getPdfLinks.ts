@@ -5,10 +5,10 @@ import path from "path";
 import pdfParse from "pdf-parse";
 import { Builder, WebDriver } from "selenium-webdriver";
 import { Options as ChromeOptions } from "selenium-webdriver/chrome";
-import { Pages, UNIP_BASE_URL } from "../../../entities/pages";
-import { AxiosInstance } from "../axios";
-import VideoDownloaderService from "../scripts/video-downloader/videoDownloader";
-import URL from "./../../../entities/URL";
+import { Pages, UNIP_BASE_URL } from "../../../../entities/pages";
+import { AxiosInstance } from "../../infra/http/axios";
+import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
+import URL from "../../../../entities/URL";
 
 type LinkType =
   | "planoDeEnsino"

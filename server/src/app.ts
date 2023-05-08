@@ -1,7 +1,7 @@
 import express from "express";
-import { router } from "./router";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import RouterConfig from "./infra/router";
 
 export class App {
   public server: express.Application;
@@ -9,7 +9,7 @@ export class App {
   constructor() {
     this.server = express();
     this.middleware();
-    this.router();
+    new RouterConfig(this.server);
   }
 
   private middleware() {
@@ -21,9 +21,5 @@ export class App {
     );
     this.server.use(express.json());
     this.server.use(cookieParser());
-  }
-
-  private router() {
-    this.server.use(router);
   }
 }

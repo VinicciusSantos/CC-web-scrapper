@@ -1,8 +1,8 @@
 import { Builder, By, IWebDriverCookie, WebDriver } from "selenium-webdriver";
 import { Options as ChromeOptions } from "selenium-webdriver/chrome";
 
-import { FormField, loginUnipFields } from "../../../entities/formFields";
-import { Pages, UNIP_BASE_URL } from "../../../entities/pages";
+import { FormField, loginUnipFields } from "../../../../entities/formFields";
+import { Pages, UNIP_BASE_URL } from "../../../../entities/pages";
 
 export default class GetCredentialsUsecase {
   private formFields: Record<loginUnipFields, FormField> = {
@@ -29,6 +29,7 @@ export default class GetCredentialsUsecase {
 
   private async configureWebDriver(): Promise<WebDriver> {
     const options = new ChromeOptions();
+    options.addArguments("--headless");
     const builder = new Builder()
       .forBrowser("chrome")
       .setChromeOptions(options)

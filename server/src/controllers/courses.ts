@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 
 import errorHandler from '../application/errors/errorHandler';
-import GetCoursesUsecase from '../usecases/getCourses';
-import GetGradesFromCourseUsecase from '../usecases/getGradesFromCourse';
-import GetPdfLinksUsecase from '../usecases/getPdfLinks';
+import GetCoursesUsecase from "../application/usecases/getCourses";
+import GetGradesFromCourseUsecase from "../application/usecases/getGradesFromCourse";
+import GetPdfLinksUsecase from "../application/usecases/getPdfLinks";
 
-class CoursesController {
+export default class CoursesController {
   public async getCourses(_req: Request, res: Response) {
     try {
       const courses = await new GetCoursesUsecase().execute();
@@ -44,5 +44,3 @@ class CoursesController {
     }
   }
 }
-
-export const coursesController = new CoursesController();
