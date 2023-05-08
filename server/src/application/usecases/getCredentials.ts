@@ -2,7 +2,8 @@ import { Builder, By, IWebDriverCookie, WebDriver } from "selenium-webdriver";
 import { Options as ChromeOptions } from "selenium-webdriver/chrome";
 
 import { FormField, loginUnipFields } from "../../../../entities/formFields";
-import { Pages, UNIP_BASE_URL } from "../../../../entities/pages";
+import { UNIP_BASE_URL } from "../../../../entities/pages";
+import WrongCredentialsError from "../errors/wrongCredentials";
 
 export default class GetCredentialsUsecase {
   private formFields: Record<loginUnipFields, FormField> = {
@@ -49,9 +50,9 @@ export default class GetCredentialsUsecase {
 
   private async checkIfLoginWasSuccessful(driver: WebDriver) {
     const url = await driver.getCurrentUrl();
-    if (!url.includes(Pages.HOME)) {
+    if (url.includes("login")) {
       driver.quit();
-      throw new Error("Invalid Login Credentials!");
+      throw new WrongCredentialsError();
     }
   }
 

@@ -23,7 +23,12 @@ export default class AuthInterceptor implements HttpInterceptor {
     });
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        const errorMessage = error.error.msg || 'Unexpected Error!';
+        let errorMessage =
+          error.error.msg ||
+          `Unexpected Error: ${JSON.stringify(error.message)}` ||
+          'Unexpected Error!';
+        if (errorMessage instanceof Object)
+          errorMessage = JSON.stringify(errorMessage);
         if (error.status === 401) this.router.navigate(['/login']);
         this.toastrService.danger(errorMessage, 'Error');
         return throwError(errorMessage);

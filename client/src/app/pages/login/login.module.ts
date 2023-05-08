@@ -9,6 +9,7 @@ import {
   NbIconModule,
   NbInputModule,
   NbSpinnerModule,
+  NbToastrModule,
 } from '@nebular/theme';
 
 import { LoginRoutingModule } from './login-routing.module';
@@ -27,6 +28,7 @@ import { LoginComponent } from './login.component';
     HttpClientModule,
     RouterModule,
     NbSpinnerModule,
+    NbToastrModule
   ],
   exports: [LoginRoutingModule],
 })

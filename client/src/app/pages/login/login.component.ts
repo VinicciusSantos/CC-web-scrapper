@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import AuthRepository from '../../repositories/auth-repository/authRepository.service';
 import { Router } from '@angular/router';
-import { finalize, take } from 'rxjs';
+import { finalize, take, throwError } from 'rxjs';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,11 @@ export class LoginComponent {
     password: new FormControl(''),
   });
 
-  constructor(private authRepository: AuthRepository, private router: Router) {}
+  constructor(
+    private authRepository: AuthRepository,
+    private router: Router,
+    private toastrService: NbToastrService
+  ) {}
 
   public get inputType(): string {
     return this.showPassword ? 'text' : 'password';
@@ -28,6 +33,7 @@ export class LoginComponent {
   }
 
   public onSubmit(): void {
+    if (!this.isFormValid()) return;
     this.loading = true;
     this.authRepository
       .login(this.loginForm.value)
@@ -40,5 +46,18 @@ export class LoginComponent {
       .subscribe(() => {
         this.router.navigate(['/home']);
       });
+  }
+
+  private isFormValid(): boolean {
+    return !this.formHasEmptyFields();
+  }
+
+  private formHasEmptyFields() {
+    const hasEmptyFields = Object.values(this.loginForm.value).some(
+      (field) => field === ''
+    );
+    if (hasEmptyFields)
+      this.toastrService.danger('Please, fill the tequired Fileds!', 'Error');
+    return hasEmptyFields;
   }
 }
