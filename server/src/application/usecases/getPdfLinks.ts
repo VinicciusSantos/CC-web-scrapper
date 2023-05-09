@@ -1,14 +1,13 @@
-import { Axios, ResponseType } from "axios";
+import { ResponseType } from "axios";
 import cheerio from "cheerio";
 import fs from "fs";
 import path from "path";
 import pdfParse from "pdf-parse";
-import { Builder, WebDriver } from "selenium-webdriver";
-import { Options as ChromeOptions } from "selenium-webdriver/chrome";
+
 import { Pages, UNIP_BASE_URL } from "../../../../entities/pages";
+import URL from "../../../../entities/URL";
 import { AxiosInstance } from "../../infra/http/axios";
 import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
-import URL from "../../../../entities/URL";
 
 type LinkType =
   | "planoDeEnsino"
@@ -41,11 +40,11 @@ export default class GetPdfLinksUsecase {
   }
 
   private createDonwloadDirectory() {
-    const publicDirPath = "../../../public/downloads/";
-    const dirPath = path.join(__dirname, publicDirPath, `${this.courseId}`);
+    const downloadsDirPath = "../../../../public/downloads/";
+    const dirPath = path.join(__dirname, downloadsDirPath, `${this.courseId}`);
     fs.mkdir(dirPath, (err) => {
       if (err) throw new Error("Erro ao criar o diretorio");
-      console.log(`O diretório '${dirPath}' foi criado com sucesso.`);
+      console.log(`>>> O diretório '${dirPath}' foi criado com sucesso.`);
       this.dirPath = dirPath;
     });
   }
