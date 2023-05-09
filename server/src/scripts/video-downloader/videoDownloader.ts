@@ -1,13 +1,14 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { spawn } from "child_process";
+import { execFile } from "child_process";
 import URL from "../../../../entities/URL";
 import { AxiosInstance } from "../../infra/http/axios";
 import { VideoInfos, VideoSectionInfos } from "./interfaces";
+import path from "path";
 
 export default class VideoDownloaderService {
   public receivedUrl!: URL;
   public redirectedUrl!: URL;
-  private readonly scriptPath = "./videoDownloader.sh";
+  private readonly scriptPath = path.join(__dirname, "videoDownloader.sh");
   public readonly authAccess =
     "HHMWqVULA0gtGujnz9J1x2LKTGaZxShrPiHfma1Jafu8QesvlE1RVEBPZZLL1NmIfEGpBFuTFtz6wq5IBTxsR4rTqxDuE4WHfWmV";
 
@@ -15,11 +16,12 @@ export default class VideoDownloaderService {
 
   public async download(videoUrl: URL, fileName: string): Promise<void> {
     this.receivedUrl = videoUrl;
-    const manifest = await this.getVideoManifestURL();
-    // this.callDownloadScript()
+    const videoInfos = await this.getVideoInfos();
+    const manifest = await this.getVideoManifestURL(videoInfos);
+    this.callDownloadScript(manifest, videoInfos.titulo);
   }
 
-  private async getVideoManifestURL(): Promise<string> {
+  private async getVideoInfos(): Promise<VideoInfos> {
     const firstToken = await this.getFirstToken();
     const secondToken = (await this.getVideoSectionInfos(firstToken)).token;
     const requestUrl = `https://api.unip.br/sistemas/ava/servico/video/transmissao/${this.videoId}`;
@@ -33,7 +35,11 @@ export default class VideoDownloaderService {
       requestUrl,
       requestConfigs
     );
-    const manifestUrl = videoInfos.data.midias[0].local;
+    return videoInfos.data;
+  }
+
+  private async getVideoManifestURL(videoInfos: VideoInfos): Promise<string> {
+    const manifestUrl = videoInfos.midias[0].local;
     return manifestUrl + "(format=m3u8-aapl-v3)";
   }
 
@@ -78,21 +84,20 @@ export default class VideoDownloaderService {
     return this.receivedUrl.extractParam("d");
   }
 
-  private async callDownloadScript(url: string, fileName: string) {
-    const process = spawn("sh", [this.scriptPath, url, fileName]);
-
-    process.stdout.on("data", (dados) => {
-      console.log(`Saída do arquivo shell: ${dados}`);
-    });
-
-    process.stderr.on("data", (dados) => {
-      console.error(`Erro ao executar o arquivo shell: ${dados}`);
-    });
-
-    process.on("close", (codigo) => {
-      console.log(
-        `O arquivo shell foi executado com código de saída ${codigo}`
-      );
-    });
+  private callDownloadScript(url: string, fileName: string) {
+    execFile(
+      this.scriptPath,
+      [`"${url}"`, fileName],
+      { shell: true },
+      (error, stdout, stderr) => {
+        if (stdout) console.log(`Saída do arquivo shell: ${stdout}`);
+        if (stderr)
+          console.error(`Erro ao executar o arquivo shell: ${stderr}`);
+        if (error)
+          console.log(
+            `O arquivo shell foi executado com código de saída ${error}`
+          );
+      }
+    );
   }
 }
