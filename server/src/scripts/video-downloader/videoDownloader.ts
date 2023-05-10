@@ -1,9 +1,10 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { execFile } from "child_process";
+import path from "path";
+
 import URL from "../../../../entities/URL";
 import { AxiosInstance } from "../../infra/http/axios";
 import { VideoInfos, VideoSectionInfos } from "./interfaces";
-import path from "path";
 
 export default class VideoDownloaderService {
   public receivedUrl!: URL;
@@ -12,13 +13,27 @@ export default class VideoDownloaderService {
   public readonly authAccess =
     "HHMWqVULA0gtGujnz9J1x2LKTGaZxShrPiHfma1Jafu8QesvlE1RVEBPZZLL1NmIfEGpBFuTFtz6wq5IBTxsR4rTqxDuE4WHfWmV";
 
+  private get videoId(): string {
+    return this.receivedUrl.extractParam("id");
+  }
+
+  private get userId(): string {
+    return this.receivedUrl.extractParam("u");
+  }
+
+  private get courseId(): string {
+    return this.receivedUrl.extractParam("d");
+  }
+
   constructor() {}
 
-  public async download(videoUrl: URL, fileName: string): Promise<void> {
+  public async download(videoUrl: URL, folderPath: string): Promise<void> {
     this.receivedUrl = videoUrl;
     const videoInfos = await this.getVideoInfos();
     const manifest = await this.getVideoManifestURL(videoInfos);
-    this.callDownloadScript(manifest, videoInfos.titulo);
+    const videoName = videoInfos.titulo.replace(" ", "_");
+    const videoPath = path.join(folderPath, videoName);
+    this.callDownloadScript(manifest, videoPath);
   }
 
   private async getVideoInfos(): Promise<VideoInfos> {
@@ -70,18 +85,6 @@ export default class VideoDownloaderService {
     const videoInfos: AxiosResponse<VideoSectionInfos> =
       await AxiosInstance.get(requestURL, requestConfigs);
     return videoInfos.data;
-  }
-
-  private get videoId(): string {
-    return this.receivedUrl.extractParam("id");
-  }
-
-  private get userId(): string {
-    return this.receivedUrl.extractParam("u");
-  }
-
-  private get courseId(): string {
-    return this.receivedUrl.extractParam("d");
   }
 
   private callDownloadScript(url: string, fileName: string) {

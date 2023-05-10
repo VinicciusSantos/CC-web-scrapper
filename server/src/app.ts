@@ -2,7 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import RouterConfig from "./infra/router";
-import clearPublicFolder from "./scripts/downloads-folder-cleaner/DownloadsFolderCleaner";
+import clearPublicFolder from "./scripts/public-folder-cleaner/PublicFolderCleaner";
 
 export class App {
   public server: express.Application;

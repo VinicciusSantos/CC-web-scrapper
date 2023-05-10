@@ -1,13 +1,12 @@
-import { ResponseType } from "axios";
 import cheerio from "cheerio";
-import fs from "fs";
+import fs, { PathLike } from "fs";
 import path from "path";
-import pdfParse from "pdf-parse";
 
 import { Pages, UNIP_BASE_URL } from "../../../../entities/pages";
 import URL from "../../../../entities/URL";
 import { AxiosInstance } from "../../infra/http/axios";
 import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
+import PdfDownloader from "../../scripts/pdf-downloader/pdfDownloader";
 
 type LinkType =
   | "planoDeEnsino"
@@ -27,6 +26,7 @@ export default class GetPdfLinksUsecase {
 
   private courseId!: string;
   private dirPath!: string;
+  private courseName!: string;
 
   public async execute(courseId: string): Promise<CoursePageLink[]> {
     this.courseId = courseId;
@@ -34,6 +34,7 @@ export default class GetPdfLinksUsecase {
     const coursePage = await AxiosInstance.get(pageURL);
     const $ = cheerio.load(coursePage.data);
     const links = await this.getCoursePageLinks($);
+    this.courseName = $("span.courseName").text().replace(/ /g, "_");
     this.createDonwloadDirectory();
     for await (let link of links) this.downloadContent(link);
     return links;
@@ -41,12 +42,12 @@ export default class GetPdfLinksUsecase {
 
   private createDonwloadDirectory() {
     const downloadsDirPath = "../../../../public/downloads/";
-    const dirPath = path.join(__dirname, downloadsDirPath, `${this.courseId}`);
+    const dirPath = path.join(__dirname, downloadsDirPath, this.courseName);
     fs.mkdir(dirPath, (err) => {
       if (err) throw new Error("Erro ao criar o diretorio");
       console.log(`>>> O diretório '${dirPath}' foi criado com sucesso.`);
-      this.dirPath = dirPath;
     });
+    this.dirPath = dirPath;
   }
 
   private async downloadContent(link: CoursePageLink): Promise<void> {
@@ -61,19 +62,13 @@ export default class GetPdfLinksUsecase {
   }
 
   private async downloadPDF(url: string) {
-    try {
-      const pdfData = await this.getPdfData(url);
-      const fileName = await this.getPdfName(pdfData);
-      const filePath = path.join(this.dirPath, `${fileName}.pdf`);
-      fs.writeFileSync(filePath, pdfData, "binary");
-    } catch (error: any) {
-      console.log(`Failed to download PDF at ${url}: ${error.message}`);
-    }
+    const pdfDownloader = new PdfDownloader();
+    pdfDownloader.download(url, this.dirPath);
   }
 
   private async downloadVideo(url: string) {
     const videoDownloader = new VideoDownloaderService();
-    videoDownloader.download(new URL(url), "teste");
+    videoDownloader.download(new URL(url), this.dirPath);
   }
 
   private async getCoursePageLinks($: cheerio.Root): Promise<CoursePageLink[]> {
@@ -92,17 +87,5 @@ export default class GetPdfLinksUsecase {
 
   private inferLinkType(url: string): LinkType {
     return url.includes("player.jsp") ? "videoaula" : "atividade";
-  }
-
-  private async getPdfData(link: string) {
-    const options = { responseType: "arraybuffer" as ResponseType };
-    const response = await AxiosInstance.get(link, options);
-    return response.data;
-  }
-
-  private async getPdfName(pdfData: Buffer): Promise<string> {
-    const parsedPdf = await pdfParse(pdfData);
-    const fileName = parsedPdf.info.Title;
-    return (fileName + "_").replace(" ", "_") + Math.random();
   }
 }
