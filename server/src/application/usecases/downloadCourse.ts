@@ -21,22 +21,28 @@ export interface CoursePageLink {
   type?: LinkType;
 }
 
-export default class GetPdfLinksUsecase {
+export default class DownloadCourseUsecase {
   constructor() {}
 
-  private courseId!: string;
   private dirPath!: string;
   private courseName!: string;
 
   public async execute(courseId: string): Promise<CoursePageLink[]> {
-    this.courseId = courseId;
     const pageURL = Pages.COURSE_PAGE + courseId;
     const coursePage = await AxiosInstance.get(pageURL);
     const $ = cheerio.load(coursePage.data);
     const links = await this.getCoursePageLinks($);
     this.courseName = $("span.courseName").text().replace(/ /g, "_");
     this.createDonwloadDirectory();
-    for await (let link of links) this.downloadContent(link);
+    const res = await Promise.allSettled(
+      links.map(async (link) => {
+        await this.downloadContent(link);
+      })
+    );
+    console.log(
+      "🚀 ~ file: downloadCourse.ts:42 ~ DownloadCourseUsecase ~ execute ~ res:",
+      res
+    );
     return links;
   }
 
@@ -50,25 +56,25 @@ export default class GetPdfLinksUsecase {
     this.dirPath = dirPath;
   }
 
-  private async downloadContent(link: CoursePageLink): Promise<void> {
+  private async downloadContent(link: CoursePageLink): Promise<string> {
     switch (link.type) {
       case "atividade":
-        this.downloadPDF(link.url);
-        break;
+        return this.downloadPDF(link.url);
       case "videoaula":
-        this.downloadVideo(link.url);
-        break;
+        return this.downloadVideo(link.url);
+      default:
+        return "";
     }
   }
 
-  private async downloadPDF(url: string) {
+  private async downloadPDF(url: string): Promise<string> {
     const pdfDownloader = new PdfDownloader();
-    pdfDownloader.download(url, this.dirPath);
+    return pdfDownloader.download(url, this.dirPath);
   }
 
-  private async downloadVideo(url: string) {
+  private async downloadVideo(url: string): Promise<string> {
     const videoDownloader = new VideoDownloaderService();
-    videoDownloader.download(new URL(url), this.dirPath);
+    return videoDownloader.download(new URL(url), this.dirPath);
   }
 
   private async getCoursePageLinks($: cheerio.Root): Promise<CoursePageLink[]> {

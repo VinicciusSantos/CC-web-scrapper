@@ -8,15 +8,13 @@ import { AxiosInstance } from "../../infra/http/axios";
 export default class PdfDownloader {
   constructor() {}
 
-  public async download(url: string, folderPath: string): Promise<void> {
-    try {
-      const pdfData = await this.getPdfData(url);
-      const fileName = await this.getPdfName(pdfData);
-      const filePath = path.join(folderPath, `${fileName}.pdf`);
-      fs.writeFileSync(filePath, pdfData, "binary");
-    } catch (error: any) {
-      console.log(`Failed to download PDF at ${url}: ${error.message}`);
-    }
+  public async download(url: string, folderPath: string): Promise<string> {
+    const pdfData = await this.getPdfData(url);
+    const fileName = await this.getPdfName(pdfData);
+    const filePath = path.join(folderPath, `${fileName}.pdf`);
+    fs.writeFileSync(filePath, pdfData, "binary");
+    console.log(`>>> Download de ${fileName} concluido!`);
+    return fileName;
   }
 
   private async getPdfData(link: string) {

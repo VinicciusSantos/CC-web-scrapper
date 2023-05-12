@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import errorHandler from '../application/errors/errorHandler';
 import GetCoursesUsecase from "../application/usecases/getCourses";
 import GetGradesFromCourseUsecase from "../application/usecases/getGradesFromCourse";
-import GetPdfLinksUsecase from "../application/usecases/getPdfLinks";
+import DownloadCourseUsecase from "../application/usecases/downloadCourse";
 
 export default class CoursesController {
   public async getCourses(_req: Request, res: Response) {
@@ -34,7 +34,7 @@ export default class CoursesController {
   public async downloadData(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const links = await new GetPdfLinksUsecase().execute(id);
+      const links = await new DownloadCourseUsecase().execute(id);
       return res.json({
         msg: "done",
         data: { links },

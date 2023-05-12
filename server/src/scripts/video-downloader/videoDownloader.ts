@@ -27,13 +27,15 @@ export default class VideoDownloaderService {
 
   constructor() {}
 
-  public async download(videoUrl: URL, folderPath: string): Promise<void> {
+  public async download(videoUrl: URL, folderPath: string): Promise<string> {
     this.receivedUrl = videoUrl;
     const videoInfos = await this.getVideoInfos();
     const manifest = await this.getVideoManifestURL(videoInfos);
     const videoName = videoInfos.titulo.replace(" ", "_");
     const videoPath = path.join(folderPath, videoName);
-    this.callDownloadScript(manifest, videoPath);
+    await this.callDownloadScript(manifest, videoPath);
+    console.log(`>>> Download de ${videoInfos.titulo} concluido!`);
+    return videoName;
   }
 
   private async getVideoInfos(): Promise<VideoInfos> {
@@ -87,20 +89,11 @@ export default class VideoDownloaderService {
     return videoInfos.data;
   }
 
-  private callDownloadScript(url: string, fileName: string) {
-    execFile(
-      this.scriptPath,
-      [`"${url}"`, fileName],
-      { shell: true },
-      (error, stdout, stderr) => {
-        if (stdout) console.log(`Saída do arquivo shell: ${stdout}`);
-        if (stderr)
-          console.error(`Erro ao executar o arquivo shell: ${stderr}`);
-        if (error)
-          console.log(
-            `O arquivo shell foi executado com código de saída ${error}`
-          );
-      }
-    );
+  private callDownloadScript(url: string, fileName: string): Promise<void> {
+    return new Promise((resolve) => {
+      execFile(this.scriptPath, [`"${url}"`, fileName], { shell: true }, () => {
+        resolve();
+      });
+    });
   }
 }
