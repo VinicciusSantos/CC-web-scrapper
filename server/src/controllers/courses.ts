@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import errorHandler from '../application/errors/errorHandler';
+import errorHandler from "../application/errors/errorHandler";
 import GetCoursesUsecase from "../application/usecases/getCourses";
 import GetGradesFromCourseUsecase from "../application/usecases/getGradesFromCourse";
 import DownloadCourseUsecase from "../application/usecases/downloadCourse";
@@ -34,10 +34,9 @@ export default class CoursesController {
   public async downloadData(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const links = await new DownloadCourseUsecase().execute(id);
-      return res.json({
-        msg: "done",
-        data: { links },
+      await new DownloadCourseUsecase().execute(id);
+      return res.status(200).json({
+        msg: "Download completed!",
       });
     } catch (error) {
       return errorHandler(res, error);

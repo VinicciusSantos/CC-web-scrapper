@@ -58,7 +58,7 @@ export default class GetGradesFromCourseUsecase {
   private calculateNota($: cheerio.Root, row: any, grade: string): string {
     const pointsPossible = $(row).find(".pointsPossible").text().trim();
     const nota = `${grade.slice(0, 4)}${pointsPossible}`;
-    return nota.replace("/", " / ");
+    return nota.replace(/ /g, '_');
   }
 
   private sortGrades(grades: NotesTableRow[]): NotesTableRow[] {

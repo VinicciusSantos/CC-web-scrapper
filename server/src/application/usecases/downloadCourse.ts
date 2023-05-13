@@ -1,12 +1,12 @@
 import cheerio from "cheerio";
-import fs, { PathLike } from "fs";
+import fs from "fs";
 import path from "path";
 
 import { Pages, UNIP_BASE_URL } from "../../../../entities/pages";
 import URL from "../../../../entities/URL";
 import { AxiosInstance } from "../../infra/http/axios";
-import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
 import PdfDownloader from "../../scripts/pdf-downloader/pdfDownloader";
+import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
 
 type LinkType =
   | "planoDeEnsino"
@@ -24,36 +24,33 @@ export interface CoursePageLink {
 export default class DownloadCourseUsecase {
   constructor() {}
 
+  private downloadsDirPath = path.join(
+    __dirname,
+    "../../../../public/downloads/"
+  );
   private dirPath!: string;
   private courseName!: string;
 
-  public async execute(courseId: string): Promise<CoursePageLink[]> {
+  public async execute(courseId: string): Promise<void> {
     const pageURL = Pages.COURSE_PAGE + courseId;
     const coursePage = await AxiosInstance.get(pageURL);
     const $ = cheerio.load(coursePage.data);
     const links = await this.getCoursePageLinks($);
     this.courseName = $("span.courseName").text().replace(/ /g, "_");
     this.createDonwloadDirectory();
-    const res = await Promise.allSettled(
+    await Promise.allSettled(
       links.map(async (link) => {
         await this.downloadContent(link);
       })
     );
-    console.log(
-      "🚀 ~ file: downloadCourse.ts:42 ~ DownloadCourseUsecase ~ execute ~ res:",
-      res
-    );
-    return links;
   }
 
   private createDonwloadDirectory() {
-    const downloadsDirPath = "../../../../public/downloads/";
-    const dirPath = path.join(__dirname, downloadsDirPath, this.courseName);
-    fs.mkdir(dirPath, (err) => {
+    this.dirPath = path.join(this.downloadsDirPath, this.courseName);
+    fs.mkdir(this.dirPath, (err) => {
       if (err) throw new Error("Erro ao criar o diretorio");
-      console.log(`>>> O diretório '${dirPath}' foi criado com sucesso.`);
+      console.log(`>>> O diretório '${this.dirPath}' foi criado com sucesso.`);
     });
-    this.dirPath = dirPath;
   }
 
   private async downloadContent(link: CoursePageLink): Promise<string> {
@@ -63,18 +60,16 @@ export default class DownloadCourseUsecase {
       case "videoaula":
         return this.downloadVideo(link.url);
       default:
-        return "";
+        throw new Error("Not Implemented!");
     }
   }
 
   private async downloadPDF(url: string): Promise<string> {
-    const pdfDownloader = new PdfDownloader();
-    return pdfDownloader.download(url, this.dirPath);
+    return new PdfDownloader().download(url, this.dirPath);
   }
 
   private async downloadVideo(url: string): Promise<string> {
-    const videoDownloader = new VideoDownloaderService();
-    return videoDownloader.download(new URL(url), this.dirPath);
+    return new VideoDownloaderService().download(new URL(url), this.dirPath);
   }
 
   private async getCoursePageLinks($: cheerio.Root): Promise<CoursePageLink[]> {

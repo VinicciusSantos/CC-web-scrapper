@@ -31,7 +31,7 @@ export default class VideoDownloaderService {
     this.receivedUrl = videoUrl;
     const videoInfos = await this.getVideoInfos();
     const manifest = await this.getVideoManifestURL(videoInfos);
-    const videoName = videoInfos.titulo.replace(" ", "_");
+    const videoName = videoInfos.titulo.replace(/ /g, '_');
     const videoPath = path.join(folderPath, videoName);
     await this.callDownloadScript(manifest, videoPath);
     console.log(`>>> Download de ${videoInfos.titulo} concluido!`);
