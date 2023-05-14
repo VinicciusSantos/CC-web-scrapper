@@ -1,8 +1,8 @@
-const electron = require("electron"); //require electron
-const { app, BrowserWindow } = electron; //import these
+const electron = require("electron"); 
+const { app, BrowserWindow } = electron; 
+
 let window;
 function createWindow() {
-  // Create the new browser window.
   window = new BrowserWindow({
     width: 1280,
     height: 720,
@@ -15,16 +15,14 @@ function createWindow() {
     pathname: require("path").join(__dirname, "../dist/client/index.html"),
   });
 
-  //set the URL to the angular build folder index.html file
-  window.loadURL(url);
-  // What happens when the window closes.
+  window.loadURL(url);  
   window.on("closed", function () {
     window = null;
   });
 }
-// Create window when electron is initialized
+
 app.on("ready", createWindow);
-// Close process.
+
 app.on("window-all-closed", function () {
   if (process.platform !== "win32") {
     app.quit();
