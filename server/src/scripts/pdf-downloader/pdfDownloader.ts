@@ -4,8 +4,9 @@ import path from "path";
 import pdfParse from "pdf-parse";
 
 import { AxiosInstance } from "../../infra/http/axios";
+import URL from "../../../../entities/URL";
 
-export default class PdfDownloader {
+export default class PdfDownloaderService {
   constructor() {}
 
   public async download(url: string, folderPath: string): Promise<string> {

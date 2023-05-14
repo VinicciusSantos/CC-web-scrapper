@@ -17,7 +17,7 @@ export default class Course {
     return this.fullName.slice(
       this.fullName.indexOf(":") + 1,
       this.fullName.length
-    );
+    ).trim();
   }
 
   private getId(): string {
