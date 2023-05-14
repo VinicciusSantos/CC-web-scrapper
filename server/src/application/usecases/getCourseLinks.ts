@@ -9,6 +9,8 @@ export type LinkType =
   | "VIDEOAULA"
   | "LIVRO TEXTO"
   | "TEXTO COMPLEMENTAR"
+  | "QUESTIONARIO"
+  | "ATIVIDADE"
   | "OUTROS";
 
 export interface CoursePageLink {
@@ -23,29 +25,34 @@ export default class GetCourseLinksUsecase {
     const pageURL = Pages.COURSE_PAGE + courseId;
     const coursePage = await AxiosInstance.get(pageURL);
     const $ = cheerio.load(coursePage.data);
-    const links = this.extractLinksFromPage($);
+    const links = await this.extractLinksFromPage($);
     return links;
   }
 
-  private extractLinksFromPage($: cheerio.Root): CoursePageLink[] {
-    const links: CoursePageLink[] = [];
-
-    $("a")
+  private async extractLinksFromPage(
+    $: cheerio.Root
+  ): Promise<CoursePageLink[]> {
+    const links = $("a")
       .toArray()
-      .filter(this.isInternalUniPLink)
+      .filter(this.isInternalUnipLink)
       .filter((e) => this.isNotImageLink($, e))
-      .forEach((link: any) => {
+      .map((link: any) => {
         const title = $(link).text().trim();
         const url = link.attribs.href;
         const type = this.inferLinkType(title, url);
-        links.push({ url, type });
-      });
-
-    return links;
+        return { url, type };
+      })
+      .map(this.replaceQuestLinks);
+    return Promise.all(links);
   }
 
-  private isInternalUniPLink(link: any): boolean {
-    return link.attribs.href.startsWith(UNIP_BASE_URL);
+  private isInternalUnipLink(link: any): boolean {
+    return (
+      link.attribs.href.startsWith(UNIP_BASE_URL) ||
+      link.attribs.href.startsWith(
+        "/webapps/blackboard/content/launchAssessment.jsp?course_id="
+      )
+    );
   }
 
   private isNotImageLink($: cheerio.Root, link: any): boolean {
@@ -53,12 +60,32 @@ export default class GetCourseLinksUsecase {
   }
 
   private inferLinkType(title: string, url: string): LinkType {
-    if (title.includes("PLANO")) return "PLANO DE ENSINO";
-    if (title.includes("SLIDES")) return "SLIDE";
-    if (title.includes("VIDEOAULA") || url.includes("player.jsp"))
-      return "VIDEOAULA";
-    if (title.includes("LIVRO-TEXTO")) return "LIVRO TEXTO";
-    if (title.includes("COMPLEMENTAR")) return "TEXTO COMPLEMENTAR";
+    if (url.includes("player.jsp")) return "VIDEOAULA";
+    const searchDictionary: Record<string, LinkType> = {
+      plano: "PLANO DE ENSINO",
+      slides: "SLIDE",
+      videoaula: "VIDEOAULA",
+      livro: "LIVRO TEXTO",
+      complementar: "TEXTO COMPLEMENTAR",
+      question: "QUESTIONARIO",
+      atividade: "ATIVIDADE",
+    };
+    for (let linktype of Object.entries(searchDictionary)) {
+      if (title.toLowerCase().includes(linktype[0])) return linktype[1];
+    }
     return "OUTROS";
+  }
+
+  private async replaceQuestLinks(
+    course: CoursePageLink
+  ): Promise<CoursePageLink> {
+    const isQuestOrActiv = course.url.startsWith(
+      "/webapps/blackboard/content/launchAssessment.jsp?course_id="
+    );
+    if (!isQuestOrActiv) return course;
+    course.url = `https://ava.ead.unip.br${course.url}`
+    const page = await AxiosInstance.get(course.url);
+    const $ = cheerio.load(page.data);
+    return course;
   }
 }

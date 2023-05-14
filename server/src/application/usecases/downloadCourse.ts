@@ -3,16 +3,21 @@ import path from "path";
 
 import URL from "../../../../entities/URL";
 import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
-import GetCourseLinksUsecase, { CoursePageLink } from "./getCourseLinks";
+import GetCourseLinksUsecase, {
+  CoursePageLink,
+  LinkType,
+} from "./getCourseLinks";
 import PdfDownloaderService from "../../scripts/pdf-downloader/pdfDownloader";
 import GetCourseByIdUsecase from "./getCourseById";
 import Course from "../../../../entities/courses";
+import PageDownloaderService from "../../scripts/page-downloader/pageDownloader";
 
 export default class DownloadCourseUsecase {
   private getCourseLinksUsecase: GetCourseLinksUsecase;
   private getCourseByIdUsecase: GetCourseByIdUsecase;
   private pdfDownloader: PdfDownloaderService;
   private videoDownloader: VideoDownloaderService;
+  private pageDownloader: PageDownloaderService;
   private courseInfos!: Course;
   private dirPath!: string;
   private downloadsDirPath = path.join(
@@ -25,6 +30,7 @@ export default class DownloadCourseUsecase {
     this.getCourseByIdUsecase = new GetCourseByIdUsecase();
     this.pdfDownloader = new PdfDownloaderService();
     this.videoDownloader = new VideoDownloaderService();
+    this.pageDownloader = new PageDownloaderService();
   }
 
   public async execute(courseId: string): Promise<void> {
@@ -51,17 +57,22 @@ export default class DownloadCourseUsecase {
   }
 
   private async downloadContent(link: CoursePageLink): Promise<void> {
-    const pdfTypes = [
+    const isPage = ["QUESTIONARIO", "ATIVIDADE"].includes(link.type);
+    const isPDF = [
       "PLANO DE ENSINO",
       "SLIDE",
       "LIVRO TEXTO",
       "TEXTO COMPLEMENTAR",
-    ];
-    if (pdfTypes.includes(link.type))
-      await this.pdfDownloader.download(link.url, this.dirPath);
-    if (link.type === "VIDEOAULA")
-      await this.videoDownloader.download(link.url, this.dirPath);
-
-    throw new Error("Not Implemented!");
+    ].includes(link.type);
+    if (isPDF) {
+      // await this.pdfDownloader.download(link.url, this.dirPath);
+    }
+    if (isPage) {
+      await this.pageDownloader.download(link.url, this.dirPath);
+    }
+    if (link.type === "VIDEOAULA") {
+      // await this.videoDownloader.download(link.url, this.dirPath);
+    }
+    // throw new Error("Not Implemented!");
   }
 }

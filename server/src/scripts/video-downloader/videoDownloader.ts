@@ -35,10 +35,6 @@ export default class VideoDownloaderService {
       / /g,
       "_"
     );
-    console.log(
-      "🚀 ~ file: videoDownloader.ts:35 ~ VideoDownloaderService ~ download ~ videoInfos:",
-      videoInfos
-    );
     const videoPath = path.join(folderPath, videoName);
     await this.callDownloadScript(manifest, videoPath);
     console.log(`>>> Download de ${videoInfos.titulo} concluido!`);

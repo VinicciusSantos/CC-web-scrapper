@@ -1,10 +1,9 @@
-import { ResponseType } from "axios";
-import fs, { PathLike } from "fs";
-import path from "path";
-import pdfParse from "pdf-parse";
+import { ResponseType } from 'axios';
+import fs from 'fs';
+import path from 'path';
+import pdfParse from 'pdf-parse';
 
-import { AxiosInstance } from "../../infra/http/axios";
-import URL from "../../../../entities/URL";
+import { AxiosInstance } from '../../infra/http/axios';
 
 export default class PdfDownloaderService {
   constructor() {}
