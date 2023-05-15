@@ -53,21 +53,14 @@ export default class DownloadCourseUsecase {
   }
 
   private async downloadContent(link: CoursePageLink): Promise<void> {
-    const isPage = ["QUESTIONARIO", "ATIVIDADE"].includes(link.type);
-    const isPDF = [
-      "PLANO DE ENSINO",
-      "SLIDE",
-      "LIVRO TEXTO",
-      "TEXTO COMPLEMENTAR",
-    ].includes(link.type);
-    if (isPDF) {
-      // await this.pdfDownloader.download(link.url, this.dirPath);
+    if (link.format === 'PDF') {
+      await this.pdfDownloader.download(link.url, link.name, this.dirPath);
     }
-    if (isPage) {
-      await this.downloadQuestionarioUsecase.execute(link.url, this.dirPath);
+    if (link.format === 'HTML') {
+      await this.downloadQuestionarioUsecase.execute(link.url, link.name, this.dirPath);
     }
-    if (link.type === "VIDEOAULA") {
-      // await this.videoDownloader.download(link.url, this.dirPath);
+    if (link.format === "MP4") {
+      await this.videoDownloader.download(link.url, link.name, this.dirPath);
     }
     // throw new Error("Not Implemented!");
   }

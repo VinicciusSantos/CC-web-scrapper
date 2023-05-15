@@ -27,18 +27,17 @@ export default class VideoDownloaderService {
 
   constructor() {}
 
-  public async download(videoUrl: string, folderPath: string): Promise<string> {
+  public async download(
+    videoUrl: string,
+    fileName: string,
+    folderPath: string
+  ): Promise<void> {
     this.receivedUrl = new URL(videoUrl);
     const videoInfos = await this.getVideoInfos();
     const manifest = await this.getVideoManifestURL(videoInfos);
-    const videoName = `${videoInfos.titulo}-${Math.random()}`.replace(
-      / /g,
-      "_"
-    );
-    const videoPath = path.join(folderPath, videoName);
+    const videoPath = path.join(folderPath, fileName);
     await this.callDownloadScript(manifest, videoPath);
     console.log(`>>> Download de ${videoInfos.titulo} concluido!`);
-    return videoName;
   }
 
   private async getVideoInfos(): Promise<VideoInfos> {

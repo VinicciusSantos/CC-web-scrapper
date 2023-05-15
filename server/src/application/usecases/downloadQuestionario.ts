@@ -11,10 +11,14 @@ export default class DownloadQuestionarioUsecase {
     this.pageDownloader = new PageDownloaderService();
   }
 
-  public async execute(url: string, folderPath: string): Promise<void> {
+  public async execute(
+    url: string,
+    fileName: string,
+    folderPath: string
+  ): Promise<void> {
     this.url = url;
     const pageURL = await this.getLastAttemptPageURL();
-    this.pageDownloader.download(pageURL, folderPath);
+    this.pageDownloader.download(pageURL, fileName, folderPath);
   }
 
   private async getLastAttemptPageURL(): Promise<string> {

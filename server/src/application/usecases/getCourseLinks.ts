@@ -13,9 +13,13 @@ export type LinkType =
   | "ATIVIDADE"
   | "OUTROS";
 
+export type LinkFormat = "PDF" | "MP4" | "HTML" | "OUTROS";
+
 export interface CoursePageLink {
   url: string;
+  name: string;
   type: LinkType;
+  format: LinkFormat;
 }
 
 export default class GetCourseLinksUsecase {
@@ -40,10 +44,13 @@ export default class GetCourseLinksUsecase {
         const title = $(link).text().trim();
         const url = link.attribs.href;
         const type = this.inferLinkType(title, url);
-        return { url, type };
-      })
-      .map(this.replaceQuestLinks);
-    return Promise.all(links);
+        const name = this.inferLinkName($, link, title, type)
+          .toUpperCase()
+          .replace(/ /g, "_");
+        const format = this.inferLinkFormat(type);
+        return { url, type, format, name } as CoursePageLink;
+      });
+    return links;
   }
 
   private isInternalUnipLink(link: any): boolean {
@@ -76,16 +83,32 @@ export default class GetCourseLinksUsecase {
     return "OUTROS";
   }
 
-  private async replaceQuestLinks(
-    course: CoursePageLink
-  ): Promise<CoursePageLink> {
-    const isQuestOrActiv = course.url.startsWith(
-      "/webapps/blackboard/content/launchAssessment.jsp?course_id="
-    );
-    if (!isQuestOrActiv) return course;
-    course.url = `https://ava.ead.unip.br${course.url}`
-    const page = await AxiosInstance.get(course.url);
-    const $ = cheerio.load(page.data);
-    return course;
+  private inferLinkFormat(type: LinkType): LinkFormat {
+    const formats: Partial<Record<LinkFormat, LinkType[]>> = {
+      MP4: ["VIDEOAULA"],
+      PDF: ["PLANO DE ENSINO", "SLIDE", "LIVRO TEXTO", "TEXTO COMPLEMENTAR"],
+      HTML: ["ATIVIDADE", "QUESTIONARIO"],
+    };
+    for (let format of Object.entries(formats))
+      if (format[1].includes(type)) return format[0] as LinkFormat;
+    return "OUTROS";
+  }
+
+  private inferLinkName(
+    $: cheerio.Root,
+    link: any,
+    title: string,
+    type: LinkType
+  ): string {
+    if (["QUESTIONARIO", "ATIVIDADE"].includes(type)) {
+      const [first, _, third] = title.split(" ");
+      return `[${third}] ${first}`;
+    }
+    if (["TEXTO COMPLEMENTAR", "PLANO DE ENSINO", "LIVRO TEXTO"].includes(type))
+      return title;
+    const container = $(link).closest(".liItem");
+    const unidade = container.find("h3 span:last-child").text().split(" ")["1"];
+    const name = `[${unidade}] ${title}`;
+    return name;
   }
 }
