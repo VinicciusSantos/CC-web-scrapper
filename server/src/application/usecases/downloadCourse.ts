@@ -1,23 +1,19 @@
 import fs from "fs";
 import path from "path";
 
-import URL from "../../../../entities/URL";
-import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
-import GetCourseLinksUsecase, {
-  CoursePageLink,
-  LinkType,
-} from "./getCourseLinks";
-import PdfDownloaderService from "../../scripts/pdf-downloader/pdfDownloader";
-import GetCourseByIdUsecase from "./getCourseById";
 import Course from "../../../../entities/courses";
-import PageDownloaderService from "../../scripts/page-downloader/pageDownloader";
+import PdfDownloaderService from "../../scripts/pdf-downloader/pdfDownloader";
+import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
+import DownloadQuestionarioUsecase from "./downloadQuestionario";
+import GetCourseByIdUsecase from "./getCourseById";
+import GetCourseLinksUsecase, { CoursePageLink } from "./getCourseLinks";
 
 export default class DownloadCourseUsecase {
   private getCourseLinksUsecase: GetCourseLinksUsecase;
   private getCourseByIdUsecase: GetCourseByIdUsecase;
+  private downloadQuestionarioUsecase: DownloadQuestionarioUsecase;
   private pdfDownloader: PdfDownloaderService;
   private videoDownloader: VideoDownloaderService;
-  private pageDownloader: PageDownloaderService;
   private courseInfos!: Course;
   private dirPath!: string;
   private downloadsDirPath = path.join(
@@ -28,9 +24,9 @@ export default class DownloadCourseUsecase {
   constructor() {
     this.getCourseLinksUsecase = new GetCourseLinksUsecase();
     this.getCourseByIdUsecase = new GetCourseByIdUsecase();
+    this.downloadQuestionarioUsecase = new DownloadQuestionarioUsecase();
     this.pdfDownloader = new PdfDownloaderService();
     this.videoDownloader = new VideoDownloaderService();
-    this.pageDownloader = new PageDownloaderService();
   }
 
   public async execute(courseId: string): Promise<void> {
@@ -68,7 +64,7 @@ export default class DownloadCourseUsecase {
       // await this.pdfDownloader.download(link.url, this.dirPath);
     }
     if (isPage) {
-      await this.pageDownloader.download(link.url, this.dirPath);
+      await this.downloadQuestionarioUsecase.execute(link.url, this.dirPath);
     }
     if (link.type === "VIDEOAULA") {
       // await this.videoDownloader.download(link.url, this.dirPath);
