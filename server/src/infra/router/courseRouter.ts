@@ -10,17 +10,22 @@ export default class CourseRouter {
     router.get(
       "/courses",
       cookieSetterMiddleware,
-      coursesController.getCourses.bind(logger)
+      coursesController.getCourses
     );
     router.get(
       "/courses/:id/grades",
       cookieSetterMiddleware,
-      coursesController.getGrades.bind(logger)
+      coursesController.getGrades
+    );
+    router.get(
+      "/courses/:id/downloadContent",
+      cookieSetterMiddleware,
+      coursesController.getDownloadContent
     );
     router.get(
       "/courses/:id/download",
       cookieSetterMiddleware,
-      coursesController.downloadData.bind(logger)
+      coursesController.downloadData
     );
   }
 }

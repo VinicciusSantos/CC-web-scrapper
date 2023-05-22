@@ -6,8 +6,9 @@ import PdfDownloaderService from "../../scripts/pdf-downloader/pdfDownloader";
 import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
 import DownloadQuestionarioUsecase from "./downloadQuestionario";
 import GetCourseByIdUsecase from "./getCourseById";
-import GetCourseLinksUsecase, { CoursePageLink } from "./getCourseLinks";
 import { Logger } from "../../infra/logger/logger";
+import GetCourseLinksUsecase from "./getCourseLinks";
+import { CoursePageLink } from '../../../../entities/courseLinks';
 
 export default class DownloadCourseUsecase {
   private getCourseLinksUsecase = new GetCourseLinksUsecase();
