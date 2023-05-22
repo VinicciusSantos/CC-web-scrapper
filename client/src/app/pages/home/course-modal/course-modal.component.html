@@ -1,0 +1,12 @@
+<div
+  [class]="'course-modal course-modal-' + modalConfig.state"
+  *ngIf="modalConfig.state !== 'closed'"
+>
+  <div
+    [class]="
+      'course-modal__container course-modal__container-' + modalConfig.state
+    "
+    clickAway
+    (clickAway)="onCloseModal()"
+  ></div>
+</div>

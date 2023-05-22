@@ -1,15 +1,12 @@
+<router-outlet></router-outlet>
 <nb-layout-header fixed>
-  <img
-    src="../../../assets//unip_icon.jpg"
-    alt="UNIP Logo"
-    height="40px"
-  />
+  <img src="../../../assets//unip_icon.jpg" alt="UNIP Logo" height="40px" />
   <h1>UNIP Web Scrapper</h1>
 </nb-layout-header>
 
 <div class="home-page__container">
   <p *ngIf="loading">loading...</p>
-  
+
   <div class="home-page__courses-container">
     <app-course-card
       *ngFor="let course of courses"

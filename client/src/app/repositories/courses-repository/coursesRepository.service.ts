@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
+  DownloadContentReponse,
   DownloadCourseDataReponse,
   GetAllCoursesReponse,
   GetCourseGradesReponse,
@@ -23,6 +24,12 @@ export default class CoursesRepository {
     return this.http.get(
       `${API_PATH}/courses/${course.id}/grades`
     ) as GetCourseGradesReponse;
+  }
+
+  public getDownloadContent(courseId: string) {
+    return this.http.get(
+      `${API_PATH}/courses/${courseId}/downloadContent`
+    ) as DownloadContentReponse;
   }
 
   public downloadCourseData(course: Course) {

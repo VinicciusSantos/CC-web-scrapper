@@ -1,0 +1,76 @@
+.course-modal,
+.course-modal-hiding {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1041 !important;
+  animation: blurBackground 300ms ease-in-out forwards;
+
+  &__container {
+    background-color: white;
+    width: 600px;
+    height: 600px;
+    border-radius: 10px;
+    animation: openModal 400ms forwards;
+
+    &-hiding {
+      animation: closeModal 400ms forwards !important;
+    }
+  }
+}
+
+.course-modal-hiding {
+  animation: unblurBackground 400ms forwards;
+}
+
+@keyframes openModal {
+  from {
+    opacity: 0;
+    transform: translateY(50vh);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes closeModal {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(50vh);
+  }
+}
+
+@keyframes blurBackground {
+  from {
+    background: rgb(183 45 103 / 0%);
+    backdrop-filter: blur(0);
+  }
+
+  to {
+    background: rgb(64 15 35 / 8.6%);
+    backdrop-filter: blur(7.5px);
+  }
+}
+
+@keyframes unblurBackground {
+  from {
+    background: rgb(183 45 103 / 4.3%);
+    backdrop-filter: blur(7.5px);
+  }
+
+  to {
+    background: rgb(183 45 103 / 0%);
+    backdrop-filter: blur(0);
+  }
+}
