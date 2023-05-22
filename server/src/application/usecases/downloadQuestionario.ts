@@ -1,5 +1,6 @@
 import { UNIP_BASE_URL } from "../../../../entities/pages";
 import { AxiosInstance } from "../../infra/http/axios";
+import { Logger } from "../../infra/logger/logger";
 import PageDownloaderService from "../../scripts/page-downloader/pageDownloader";
 import cheerio from "cheerio";
 
@@ -7,8 +8,8 @@ export default class DownloadQuestionarioUsecase {
   private pageDownloader: PageDownloaderService;
   private url!: string;
 
-  constructor() {
-    this.pageDownloader = new PageDownloaderService();
+  constructor(private logger: Logger) {
+    this.pageDownloader = new PageDownloaderService(logger);
   }
 
   public async execute(

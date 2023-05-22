@@ -8,14 +8,13 @@ import ConsoleLogger from "./infra/logger/consoleLogger";
 
 export class App {
   public server: express.Application;
-  public logger: Logger;
+  public logger = new ConsoleLogger();
 
   constructor() {
-    this.logger = new ConsoleLogger();
     clearPublicFolder(this.logger);
     this.server = express();
     this.middleware();
-    new RouterConfig(this.server);
+    new RouterConfig(this.server, this.logger);
   }
 
   private middleware() {

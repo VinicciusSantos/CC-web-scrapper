@@ -1,7 +1,7 @@
 import { Router } from "express";
 import CredentialsController from "../../controllers/credentials";
 
-export default class credentialsRouter {
+export default class CredentialsRouter {
   constructor(router: Router) {
     const credentialsController = new CredentialsController();
 

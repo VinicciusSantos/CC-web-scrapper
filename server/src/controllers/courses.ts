@@ -4,11 +4,20 @@ import errorHandler from "../application/errors/errorHandler";
 import GetCoursesUsecase from "../application/usecases/getCourses";
 import GetGradesFromCourseUsecase from "../application/usecases/getGradesFromCourse";
 import DownloadCourseUsecase from "../application/usecases/downloadCourse";
+import { Logger } from "../infra/logger/logger";
 
 export default class CoursesController {
-  public async getCourses(_req: Request, res: Response) {
+  private getCoursesUsecase = new GetCoursesUsecase();
+  private getGradesFromCourseUsecase = new GetGradesFromCourseUsecase();
+  private downloadCourseUsecase: DownloadCourseUsecase;
+
+  constructor(private logger: Logger) {
+    this.downloadCourseUsecase = new DownloadCourseUsecase(this.logger);
+  }
+
+  public getCourses = async (_req: Request, res: Response) => { 
     try {
-      const courses = await new GetCoursesUsecase().execute();
+      const courses = await this.getCoursesUsecase.execute();
       return res.json({
         msg: `returning ${courses.length} courses with success`,
         data: { courses },
@@ -18,10 +27,10 @@ export default class CoursesController {
     }
   }
 
-  public async getGrades(req: Request, res: Response) {
+  public getGrades = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const grades = await new GetGradesFromCourseUsecase().execute(id);
+      const grades = await this.getGradesFromCourseUsecase.execute(id);
       return res.json({
         msg: `returning grades from course ${id}`,
         data: { grades },
@@ -31,13 +40,11 @@ export default class CoursesController {
     }
   }
 
-  public async downloadData(req: Request, res: Response) {
+  public downloadData = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      await new DownloadCourseUsecase().execute(id);
-      return res.status(200).json({
-        msg: "Download completed!",
-      });
+      await this.downloadCourseUsecase.execute(id);
+      return res.status(200).json({ msg: "Download completed!" });
     } catch (error) {
       return errorHandler(res, error);
     }

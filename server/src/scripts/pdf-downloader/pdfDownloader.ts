@@ -1,12 +1,12 @@
 import { ResponseType } from "axios";
 import fs from "fs";
 import path from "path";
-import pdfParse from "pdf-parse";
 
 import { AxiosInstance } from "../../infra/http/axios";
+import { Logger } from "../../infra/logger/logger";
 
 export default class PdfDownloaderService {
-  constructor() {}
+  constructor(private logger: Logger) {}
 
   public async download(
     url: string,
@@ -16,7 +16,7 @@ export default class PdfDownloaderService {
     const pdfData = await this.getPdfData(url);
     const filePath = path.join(folderPath, `${fileName}.pdf`);
     fs.writeFileSync(filePath, pdfData, "binary");
-    console.log(`>>> Download de ${fileName} concluido!`);
+    this.logger.success(`Download de ${fileName} concluido`);
     return fileName;
   }
 

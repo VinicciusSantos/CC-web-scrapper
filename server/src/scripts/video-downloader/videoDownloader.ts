@@ -5,6 +5,7 @@ import path from "path";
 import URL from "../../../../entities/URL";
 import { AxiosInstance } from "../../infra/http/axios";
 import { VideoInfos, VideoSectionInfos } from "./interfaces";
+import { Logger } from "../../infra/logger/logger";
 
 export default class VideoDownloaderService {
   public receivedUrl!: URL;
@@ -25,7 +26,7 @@ export default class VideoDownloaderService {
     return this.receivedUrl.extractParam("d");
   }
 
-  constructor() {}
+  constructor(private logger: Logger) {}
 
   public async download(
     videoUrl: string,
@@ -37,7 +38,7 @@ export default class VideoDownloaderService {
     const manifest = await this.getVideoManifestURL(videoInfos);
     const videoPath = path.join(folderPath, fileName);
     await this.callDownloadScript(manifest, videoPath);
-    console.log(`>>> Download de ${videoInfos.titulo} concluido!`);
+    this.logger.success(`Download de ${videoInfos.titulo} concluido`);
   }
 
   private async getVideoInfos(): Promise<VideoInfos> {

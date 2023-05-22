@@ -7,10 +7,11 @@ import VideoDownloaderService from "../../scripts/video-downloader/videoDownload
 import DownloadQuestionarioUsecase from "./downloadQuestionario";
 import GetCourseByIdUsecase from "./getCourseById";
 import GetCourseLinksUsecase, { CoursePageLink } from "./getCourseLinks";
+import { Logger } from "../../infra/logger/logger";
 
 export default class DownloadCourseUsecase {
-  private getCourseLinksUsecase: GetCourseLinksUsecase;
-  private getCourseByIdUsecase: GetCourseByIdUsecase;
+  private getCourseLinksUsecase = new GetCourseLinksUsecase();
+  private getCourseByIdUsecase = new GetCourseByIdUsecase();
   private downloadQuestionarioUsecase: DownloadQuestionarioUsecase;
   private pdfDownloader: PdfDownloaderService;
   private videoDownloader: VideoDownloaderService;
@@ -21,12 +22,10 @@ export default class DownloadCourseUsecase {
     "../../../../public/downloads/"
   );
 
-  constructor() {
-    this.getCourseLinksUsecase = new GetCourseLinksUsecase();
-    this.getCourseByIdUsecase = new GetCourseByIdUsecase();
-    this.downloadQuestionarioUsecase = new DownloadQuestionarioUsecase();
-    this.pdfDownloader = new PdfDownloaderService();
-    this.videoDownloader = new VideoDownloaderService();
+  constructor(private logger: Logger) {
+    this.downloadQuestionarioUsecase = new DownloadQuestionarioUsecase(logger);
+    this.pdfDownloader = new PdfDownloaderService(logger);
+    this.videoDownloader = new VideoDownloaderService(logger);
   }
 
   public async execute(courseId: string): Promise<void> {
@@ -38,26 +37,28 @@ export default class DownloadCourseUsecase {
         await this.downloadContent(link);
       })
     );
-    console.log(`>>> O curso ${this.courseInfos.name} foi baixado com sucesso`);
+    this.logger.success(`O curso ${this.courseInfos.name} foi baixado`);
   }
 
   private createDonwloadDirectory() {
-    this.dirPath = path.join(
-      this.downloadsDirPath,
-      this.courseInfos.name.replace(/ /g, "_")
-    );
+    const newDirName = this.courseInfos.name.replace(/ /g, "_");
+    this.dirPath = path.join(this.downloadsDirPath, newDirName);
     fs.mkdir(this.dirPath, (err) => {
       if (err) throw new Error("Erro ao criar o diretorio");
-      console.log(`>>> O diretório '${this.dirPath}' foi criado com sucesso.`);
+      this.logger.success(`O diretório '${newDirName}' foi criado`);
     });
   }
 
   private async downloadContent(link: CoursePageLink): Promise<void> {
-    if (link.format === 'PDF') {
+    if (link.format === "PDF") {
       await this.pdfDownloader.download(link.url, link.name, this.dirPath);
     }
-    if (link.format === 'HTML') {
-      await this.downloadQuestionarioUsecase.execute(link.url, link.name, this.dirPath);
+    if (link.format === "HTML") {
+      await this.downloadQuestionarioUsecase.execute(
+        link.url,
+        link.name,
+        this.dirPath
+      );
     }
     if (link.format === "MP4") {
       await this.videoDownloader.download(link.url, link.name, this.dirPath);

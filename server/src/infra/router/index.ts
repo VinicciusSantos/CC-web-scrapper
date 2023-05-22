@@ -1,12 +1,13 @@
 import { Application, Router } from "express";
-import credentialsRouter from "./credentialsRouter";
 import CourseRouter from "./courseRouter";
+import { Logger } from "../logger/logger";
+import CredentialsRouter from "./credentialsRouter";
 
 export default class RouterConfig {
-  constructor(app: Application) {
+  constructor(app: Application, logger: Logger) {
     const router: Router = Router();
-    new CourseRouter(router);
-    new credentialsRouter(router);
+    new CourseRouter(router, logger);
+    new CredentialsRouter(router);
     app.use(router);
   }
 }
