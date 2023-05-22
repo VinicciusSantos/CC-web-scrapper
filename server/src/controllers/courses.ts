@@ -6,11 +6,13 @@ import GetGradesFromCourseUsecase from "../application/usecases/getGradesFromCou
 import DownloadCourseUsecase from "../application/usecases/downloadCourse";
 import { Logger } from "../infra/logger/logger";
 import GetCourseLinksUsecase from "../application/usecases/getCourseLinks";
+import GetCourseByIdUsecase from "../application/usecases/getCourseById";
 
 export default class CoursesController {
   private getCoursesUsecase = new GetCoursesUsecase();
   private getGradesFromCourseUsecase = new GetGradesFromCourseUsecase();
   private getCourseLinks = new GetCourseLinksUsecase();
+  private getCourseById = new GetCourseByIdUsecase();
   private downloadCourseUsecase: DownloadCourseUsecase;
 
   constructor(private logger: Logger) {
@@ -55,10 +57,13 @@ export default class CoursesController {
   public getDownloadContent = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const links = await this.getCourseLinks.execute(id);
+      const [course, links] = await Promise.all([
+        this.getCourseById.execute(id),
+        this.getCourseLinks.execute(id),
+      ]);
       return res.json({
         msg: `returning avaliable downloads for course ${id}`,
-        data: { links },
+        data: { links, course },
       });
     } catch (error) {
       return errorHandler(res, error);
