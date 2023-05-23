@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import Course from '../../../../../entities/courses';
 import { ResponseInterfaces } from 'src/app/infra/http/interfaces';
 import { NotesTableRow } from '../../../../../entities/notes';
-import { CoursePageLink } from '../../../../../entities/courseLinks';
+import { CoursePageLink, GetCourseLinksOutput } from '../../../../../entities/courseLinks';
 
 export namespace CourseInterfaces {
   export class getAll {
@@ -19,8 +19,9 @@ export namespace CourseInterfaces {
       type?: any;
     }[];
   }
-  export class downloadContent {
-    public links!: CoursePageLink[];
+  export class CourseLinks {
+    public links!: GetCourseLinksOutput;
+    public course!: Course;
   }
 }
 
@@ -36,6 +37,6 @@ export type DownloadCourseDataReponse = Observable<
   ResponseInterfaces.Get<CourseInterfaces.downloadCourseData>
 >;
 
-export type DownloadContentReponse = Observable<
-  ResponseInterfaces.Get<CourseInterfaces.downloadContent>
+export type CourseLinksReponse = Observable<
+  ResponseInterfaces.Get<CourseInterfaces.CourseLinks>
 >;

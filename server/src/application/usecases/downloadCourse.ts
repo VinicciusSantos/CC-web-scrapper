@@ -33,11 +33,11 @@ export default class DownloadCourseUsecase {
     this.courseInfos = await this.getCourseByIdUsecase.execute(courseId);
     const links = await this.getCourseLinksUsecase.execute(courseId);
     this.createDonwloadDirectory();
-    await Promise.allSettled(
-      links.map(async (link) => {
-        await this.downloadContent(link);
-      })
-    );
+    // await Promise.allSettled(
+    //   links.map(async (link) => {
+    //     await this.downloadContent(link);
+    //   })
+    // );
     this.logger.success(`O curso ${this.courseInfos.name} foi baixado`);
   }
 

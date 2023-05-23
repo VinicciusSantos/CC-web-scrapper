@@ -15,4 +15,7 @@ export interface CoursePageLink {
   name: string;
   type: LinkType;
   format: LinkFormat;
+  unidade: string | null;
 }
+
+export type GetCourseLinksOutput = Record<string, CoursePageLink[]>;
