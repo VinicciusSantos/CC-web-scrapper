@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NbLayoutModule } from '@nebular/theme';
+import { NbCheckboxModule, NbLayoutModule, NbButtonModule, NbIconModule, NbSpinnerModule } from '@nebular/theme';
 import { CourseCardModule } from 'src/app/components/course-card/course-card.module';
 
 import { CourseModalComponent } from './course-modal/course-modal.component';
@@ -15,9 +15,13 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
     CommonModule,
     RouterModule,
     NbLayoutModule,
+    NbButtonModule,
+    NbIconModule,
+    NbSpinnerModule,
     CourseCardModule,
     DirectivesModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    NbCheckboxModule,
   ],
 })
 export class HomeModule {}

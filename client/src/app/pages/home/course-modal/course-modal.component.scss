@@ -10,18 +10,55 @@
   align-items: center;
   z-index: 1041 !important;
   animation: blurBackground 300ms ease-in-out forwards;
-
+  
   &__container {
-    background-color: white;
-    width: 600px;
-    height: 600px;
+    background-color: #222b45;
+    box-shadow: 0 0 8px rgba(202, 219, 255, 0.178);
+    width: 700px;
     border-radius: 10px;
     animation: openModal 400ms forwards;
+    padding: 25px;
 
     &-hiding {
       animation: closeModal 400ms forwards !important;
     }
   }
+
+  &__unidades-list {
+    width: 100%;  
+    list-style: none;
+    margin: 10px 0 0;
+    height: auto;
+    overflow-y: scroll;
+    max-height: 60vh;
+    padding: 0 10px;
+
+    &-tables-container {
+      width: 100%;
+      margin: 0 0 10px;
+  
+      span {
+        color: #ff7f7f;
+      }
+  
+      table {
+        width: 100%;
+
+        td:last-child, th:last-child {
+          text-align: center;
+        }
+      }
+    }
+
+    footer {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 15px;
+    }
+  }
+
 }
 
 .course-modal-hiding {
@@ -53,12 +90,12 @@
 
 @keyframes blurBackground {
   from {
-    background: rgb(183 45 103 / 0%);
+    background: #00000000;
     backdrop-filter: blur(0);
   }
 
   to {
-    background: rgb(64 15 35 / 8.6%);
+    background: #b1c2f517;
     backdrop-filter: blur(7.5px);
   }
 }
@@ -73,4 +110,24 @@
     background: rgb(183 45 103 / 0%);
     backdrop-filter: blur(0);
   }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ff7f7f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #f87272;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f0f0f031;
+}
+
+::-webkit-scrollbar-track:hover {
+  background-color: #e0e0e031;
 }

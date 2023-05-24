@@ -1,12 +1,55 @@
 <div
-  [class]="'course-modal course-modal-' + modalConfig.state"
   *ngIf="modalConfig.state !== 'closed'"
+  [class]="'course-modal course-modal-' + modalConfig.state"
 >
   <div
+    clickAway
+    (clickAway)="onCloseModal()"
+    [nbSpinner]="modalConfig.loading"
+    nbSpinnerStatus="danger"
     [class]="
       'course-modal__container course-modal__container-' + modalConfig.state
     "
-    clickAway
-    (clickAway)="onCloseModal()"
-  ></div>
+  >
+    <ng-container *ngIf="!modalConfig.loading">
+      <h2>{{ course.name }}</h2>
+      <ul class="course-modal__unidades-list">
+        <li
+          *ngFor="let unidade of formmatedLinks"
+          class="course-modal__unidades-list-tables-container"
+        >
+          <span>{{ unidade[0] }}</span>
+          <table class="course-modal__table">
+            <tr>
+              <th width="30px"></th>
+              <th>name</th>
+              <th>format</th>
+              <th>type</th>
+              <th *ngIf="unidade[0] !== 'Outros Materiais'">unidade</th>
+            </tr>
+            <tr
+              *ngFor="let link of unidade[1]"
+              (click)="changeCheckboxState($event, unidade[0], link)"
+            >
+              <td><input type="checkbox" [checked]="link.checked" /></td>
+              <td>{{ link.name }}</td>
+              <td>{{ link.format }}</td>
+              <td>{{ link.type }}</td>
+              <td>{{ link.unidade }}</td>
+            </tr>
+          </table>
+        </li>
+        <footer>
+          <button nbButton outline status="danger" size="small" (click)="onCloseModal()">
+            <nb-icon icon="slash-outline"></nb-icon>
+            Cancelar
+          </button>
+          <button nbButton size="small" hero status="info" (click)="onSubmit()">
+            <nb-icon icon="download-outline"></nb-icon>
+            Download
+          </button>
+        </footer>
+      </ul>
+    </ng-container>
+  </div>
 </div>

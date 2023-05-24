@@ -1,7 +1,8 @@
+import { GetCourseLinksOutput } from './../../../../../entities/courseLinks';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  DownloadContentReponse,
+  CourseLinksReponse as CourseLinksReponse,
   DownloadCourseDataReponse,
   GetAllCoursesReponse,
   GetCourseGradesReponse,
@@ -26,15 +27,16 @@ export default class CoursesRepository {
     ) as GetCourseGradesReponse;
   }
 
-  public getDownloadContent(courseId: string) {
+  public getCourseLinks(courseId: string) {
     return this.http.get(
       `${API_PATH}/courses/${courseId}/downloadContent`
-    ) as DownloadContentReponse;
+    ) as CourseLinksReponse;
   }
 
-  public downloadCourseData(course: Course) {
-    return this.http.get(
-      `${API_PATH}/courses/${course.id}/download`
+  public downloadCourseData(courseId: string, data: GetCourseLinksOutput) {
+    return this.http.post(
+      `${API_PATH}/courses/${courseId}/download`,
+      data
     ) as DownloadCourseDataReponse;
   }
 }
