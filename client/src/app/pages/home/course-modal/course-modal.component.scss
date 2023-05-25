@@ -12,8 +12,8 @@
   animation: blurBackground 300ms ease-in-out forwards;
   
   &__container {
-    background-color: #222b45;
-    box-shadow: 0 0 8px rgba(202, 219, 255, 0.178);
+    background-color: white;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.082);
     width: 700px;
     border-radius: 10px;
     animation: openModal 400ms forwards;
@@ -38,7 +38,7 @@
       margin: 0 0 10px;
   
       span {
-        color: #ff7f7f;
+        color: #4b7de7;
       }
   
       table {
@@ -95,7 +95,7 @@
   }
 
   to {
-    background: #b1c2f517;
+    background: #92aeec27;
     backdrop-filter: blur(7.5px);
   }
 }
@@ -110,24 +110,4 @@
     background: rgb(183 45 103 / 0%);
     backdrop-filter: blur(0);
   }
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #ff7f7f;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #f87272;
-}
-
-::-webkit-scrollbar-track {
-  background-color: #f0f0f031;
-}
-
-::-webkit-scrollbar-track:hover {
-  background-color: #e0e0e031;
 }

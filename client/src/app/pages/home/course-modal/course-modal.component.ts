@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogRef } from '@nebular/theme';
 import { finalize, take } from 'rxjs';
-import CoursesRepository from 'src/app/repositories/courses-repository/coursesRepository.service';
 import {
   CoursePageLink,
   GetCourseLinksOutput,
 } from '../../../../../../entities/courseLinks';
 import Course from '../../../../../../entities/courses';
+import CoursesService from 'src/app/services/courses-service/courses.service';
 
 interface ModalConfig {
   courseId: string;
@@ -40,7 +40,7 @@ export class CourseModalComponent implements OnInit {
   };
 
   constructor(
-    private coursesRepository: CoursesRepository,
+    private coursesService: CoursesService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -70,7 +70,7 @@ export class CourseModalComponent implements OnInit {
 
   public getDownloadLinks(): void {
     this.modalConfig.loading = true;
-    this.coursesRepository
+    this.coursesService
       .getCourseLinks(this.modalConfig.courseId)
       .pipe(
         take(1),
@@ -90,6 +90,7 @@ export class CourseModalComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    this.modalConfig.loading = true;
     this.submitValue = { ...this.links };
     this.unidades.forEach((uni) => {
       this.submitValue[uni] = this.submitValue[uni].filter(
@@ -97,16 +98,10 @@ export class CourseModalComponent implements OnInit {
       );
       if (this.submitValue[uni].length === 0) delete this.submitValue[uni];
     });
-    this.coursesRepository
+    this.coursesService
       .downloadCourseData(this.course.id, this.submitValue)
-      .pipe(take(1))
-      .subscribe((res) => {
-        console.log(
-          '🚀 ~ file: course-modal.component.ts:103 ~ CourseModalComponent ~ .pipe ~ res:',
-          res
-        );
-      });
-    console.log(this.submitValue);
+      .pipe(take(1));
+    this.onCloseModal();
   }
 
   public changeCheckboxState(

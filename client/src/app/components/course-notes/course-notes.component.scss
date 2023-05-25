@@ -10,7 +10,6 @@ table {
   text-align: center;
   overflow: hidden;
   border-collapse: separate;
-  border: solid #192038 1px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -25,11 +24,11 @@ table {
     font-weight: bold;
     text-align: center;
     padding: 5px;
-    background-color: #151A30;
+    background-color: #dde7ff;
   }
 
   tr:nth-of-type(odd) {
-    background-color: #151a3040;
+    background-color: #92aeec23;
   }
 
   td.nb-column-item {
@@ -47,7 +46,7 @@ table {
 
   tr:last-child td {
     font-weight: bold;
-    background-color: #1f2748;
+    background-color: #e6edff;
   }
 }
 

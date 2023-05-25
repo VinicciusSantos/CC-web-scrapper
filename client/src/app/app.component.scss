@@ -1,7 +1,9 @@
-::ng-deep nav {
-  gap: 10px;
+@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
 
-  img {
-    border-radius: 7px;
-  }
+.app-main {
+  padding: 0 !important;
+  display: flex;
+  right: 0;
+  height: 100vh;
+  overflow-y: scroll;
 }

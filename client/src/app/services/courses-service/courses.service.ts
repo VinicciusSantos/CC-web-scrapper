@@ -1,4 +1,4 @@
-import { GetCourseLinksOutput } from './../../../../../entities/courseLinks';
+import { GetCourseLinksOutput } from '../../../../../entities/courseLinks';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
@@ -14,7 +14,7 @@ export const API_PATH = 'http://localhost:3000';
 @Injectable({
   providedIn: 'root',
 })
-export default class CoursesRepository {
+export default class CoursesService {
   constructor(private http: HttpClient) {}
 
   public getAllCourses(): GetAllCoursesReponse {

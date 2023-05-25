@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, finalize, of, take } from 'rxjs';
-import CoursesRepository from 'src/app/repositories/courses-repository/coursesRepository.service';
 import Course from '../../../../../entities/courses';
+import CoursesService from 'src/app/services/courses-service/courses.service';
 
 @Component({
   selector: 'app-home',
@@ -12,10 +12,10 @@ export class HomeComponent implements OnInit {
   public courses: Course[] = [];
   public loading = true;
 
-  constructor(private coursesRepository: CoursesRepository) {}
+  constructor(private coursesService: CoursesService) {}
 
   public ngOnInit(): void {
-    this.coursesRepository
+    this.coursesService
       .getAllCourses()
       .pipe(
         take(1),

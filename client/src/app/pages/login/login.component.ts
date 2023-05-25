@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import AuthRepository from '../../repositories/auth-repository/authRepository.service';
+import AuthService from '../../services/auth-service/auth.service';
 import { Router } from '@angular/router';
 import { finalize, take, throwError } from 'rxjs';
 import { NbToastrService } from '@nebular/theme';
@@ -19,7 +19,7 @@ export class LoginComponent {
   });
 
   constructor(
-    private authRepository: AuthRepository,
+    private authRepository: AuthService,
     private router: Router,
     private toastrService: NbToastrService
   ) {}

@@ -1,0 +1,32 @@
+<div [class]="'app-sidebar ' + 'app-sidebar-' + state">
+  <button class="hide-sidebar" (click)="changeSidebarState()">
+    <nb-icon icon="arrowhead-left-outline" status="primary"></nb-icon>
+  </button>
+  <h1 *ngIf="isSidebarOpen">{{ title }}</h1>
+  <div class="tab-group">
+    <!-- <ng-container *ngFor="let tab of tabs">
+            <app-tab
+              [label]="tab.label"
+              [icon]="tab.icon"
+              [active]="isTabActive(tab.redirectTo)"
+              [size]="tabSize"
+              [redirectTo]="tab.redirectTo"></app-tab>
+            <hr />
+          </ng-container> -->
+  </div>
+  <div class="user-profile">
+    <!-- <div class="left-side">
+            <app-avatar [username]="user.username"></app-avatar>
+            <div class="user-infos" *ngIf="isSidebarOpen">
+              <span class="profile-username">{{ user.username }}</span>
+              <span class="profile-email">{{ user.email }}</span>
+            </div>
+          </div>
+          <app-button
+            *ngIf="isSidebarOpen"
+            class="logout-button"
+            type="icon"
+            (appOnClick)="onLogout()"
+            iconType="logout"></app-button> -->
+  </div>
+</div>

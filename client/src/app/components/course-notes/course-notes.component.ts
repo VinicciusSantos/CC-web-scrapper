@@ -4,9 +4,9 @@ import {
   NbTreeGridDataSourceBuilder,
 } from '@nebular/theme';
 import { NotesTableRow } from '../../../../../entities/notes';
-import CoursesRepository from 'src/app/repositories/courses-repository/coursesRepository.service';
 import Course from '../../../../../entities/courses';
 import { finalize, take } from 'rxjs';
+import CoursesService from '../../services/courses-service/courses.service';
 
 @Component({
   selector: 'app-course-notes',
@@ -25,7 +25,7 @@ export class CourseNotesComponent implements OnInit {
   public data: NotesTableRow[] = [];
 
   constructor(
-    private coursesRepository: CoursesRepository,
+    private coursesService: CoursesService,
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<NotesTableRow>
   ) {}
 
@@ -43,7 +43,7 @@ export class CourseNotesComponent implements OnInit {
   public getGradesData(): void {
     this.clearGradesData();
     this.changeLoadingState(true);
-    this.coursesRepository
+    this.coursesService
       .getCourseGrades(this.course)
       .pipe(take(1), finalize(() => {
         this.changeLoadingState(false);

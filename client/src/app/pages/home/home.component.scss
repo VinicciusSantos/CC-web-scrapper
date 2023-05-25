@@ -1,11 +1,16 @@
+:host {
+  display: flex;
+  overflow-y: hidden;
+}
+
 .home-page {
   &__container {
-    background-color: #00000010;
-    height: 100%;
-    width: 100%;
-    border-radius: 15px;
+    background-color: #92aeec25;
+    width: 100vw;
     padding: 20px;
-    padding-top: 70px;
+    height: 100vh;
+    margin-bottom: 20px;
+    overflow: hidden scroll;
 
     h2 {
       margin-bottom: 20px;
@@ -16,15 +21,15 @@
     display: grid;
     gap: 15px;
 
-    @media screen and (min-width: 1220px) {
+    @media screen and (min-width: 1570px) {
       grid-template-columns: repeat(3, 1fr);
     }
 
-    @media screen and (max-width: 1220px) {
+    @media screen and (max-width: 1570px) {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    @media screen and (max-width: 840px) {
+    @media screen and (max-width: 1190px) {
       grid-template-columns: repeat(1, 1fr);
     }
   }

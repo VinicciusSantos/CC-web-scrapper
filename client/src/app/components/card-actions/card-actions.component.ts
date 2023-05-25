@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
-import CoursesRepository from '../../repositories/courses-repository/coursesRepository.service';
+import CoursesService from '../../services/courses-service/courses.service';
 import Course from '../../../../../entities/courses';
 import { take } from 'rxjs';
 import { Router } from '@angular/router';
