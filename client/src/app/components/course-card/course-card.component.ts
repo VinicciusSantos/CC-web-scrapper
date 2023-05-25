@@ -1,4 +1,10 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 
 import Course from '../../../../../entities/courses';
 import { CourseNotesComponent } from '../course-notes/course-notes.component';
@@ -10,6 +16,7 @@ import { CourseNotesComponent } from '../course-notes/course-notes.component';
 })
 export class CourseCardComponent {
   @Input() public course!: Course;
+  @Output() public onDownload = new EventEmitter<string>();
   public loading = false;
 
   @ViewChild(CourseNotesComponent)

@@ -1,4 +1,3 @@
-<router-outlet></router-outlet>
 <app-sidebar></app-sidebar>
 <div class="home-page__container">
   <p *ngIf="loading">loading...</p>
@@ -7,6 +6,13 @@
     <app-course-card
       *ngFor="let course of courses"
       [course]="course"
+      (onDownload)="onDownload($event)"
     ></app-course-card>
   </div>
 </div>
+
+<app-course-modal
+  [courseId]="selectedCourseId"
+  [isOpen]="isDownloadModalOpen"
+  (closeEvent)="onCloseDownloadModal()"
+></app-course-modal>

@@ -9,6 +9,7 @@
     <app-card-actions
       [course]="course"
       (onReload)="onReloadData()"
+      (onDownload)="onDownload.emit($event)"
     ></app-card-actions>
   </header>
 

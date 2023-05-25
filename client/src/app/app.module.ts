@@ -9,6 +9,7 @@ import { NbLayoutModule, NbThemeModule, NbToastrModule } from '@nebular/theme';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import AuthInterceptor from './infra/http/AuthInterceptor.service';
+import { HomeModule } from './pages/home/home.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import AuthInterceptor from './infra/http/AuthInterceptor.service';
     NbEvaIconsModule,
     HttpClientModule,
     RouterModule,
+    HomeModule,
     NbToastrModule.forRoot(),
   ],
   providers: [

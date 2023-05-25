@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NbDialogRef } from '@nebular/theme';
-import { finalize, take } from 'rxjs';
 import {
-  CoursePageLink,
-  GetCourseLinksOutput,
-} from '../../../../../../entities/courseLinks';
-import Course from '../../../../../../entities/courses';
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+} from '@angular/core';
+import { finalize, take } from 'rxjs';
 import CoursesService from 'src/app/services/courses-service/courses.service';
 
+import { CoursePageLink } from '../../../../../entities/courseLinks';
+import Course from '../../../../../entities/courses';
+
 interface ModalConfig {
-  courseId: string;
   loading: boolean;
   state: 'appearing' | 'open' | 'hiding' | 'closed';
   isOpen: boolean;
@@ -27,29 +28,29 @@ export type LinkTableContent = Record<string, CourseRow[]>;
   templateUrl: './course-modal.component.html',
   styleUrls: ['./course-modal.component.scss'],
 })
-export class CourseModalComponent implements OnInit {
+export class CourseModalComponent implements OnChanges {
+  @Input() public courseId!: string;
+  @Input() public isOpen!: boolean;
+  @Output() public closeEvent = new EventEmitter<void>();
+
   public links!: LinkTableContent;
   public submitValue!: LinkTableContent;
   public course!: Course;
   public unidades: string[] = [];
   public modalConfig: ModalConfig = {
-    courseId: '',
     loading: false,
     state: 'closed',
     isOpen: false,
   };
 
-  constructor(
-    private coursesService: CoursesService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  constructor(private coursesService: CoursesService) {}
 
   public get formmatedLinks(): any[][] {
     return Object.entries(this.links);
   }
 
   public onOpenModal(): void {
+    this.getDownloadLinks();
     if (this.modalConfig.state === 'open') return;
     this.modalConfig.state = 'appearing';
     setTimeout(() => {
@@ -64,14 +65,14 @@ export class CourseModalComponent implements OnInit {
     setTimeout(() => {
       this.modalConfig.state = 'closed';
       this.modalConfig.isOpen = false;
-      this.router.navigate(['home']);
+      this.closeEvent.emit();
     }, 400);
   };
 
   public getDownloadLinks(): void {
     this.modalConfig.loading = true;
     this.coursesService
-      .getCourseLinks(this.modalConfig.courseId)
+      .getCourseLinks(this.courseId)
       .pipe(
         take(1),
         finalize(() => {
@@ -114,15 +115,7 @@ export class CourseModalComponent implements OnInit {
     foundLink.checked = !foundLink.checked;
   }
 
-  private getCourseId(): void {
-    this.route.params.subscribe(
-      (params) => (this.modalConfig.courseId = params['courseId'])
-    );
-  }
-
-  public ngOnInit(): void {
-    this.getCourseId();
-    this.getDownloadLinks();
-    this.onOpenModal();
+  public ngOnChanges(): void {
+    this.isOpen ? this.onOpenModal() : this.onCloseModal();
   }
 }

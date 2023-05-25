@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
-import CoursesService from '../../services/courses-service/courses.service';
-import Course from '../../../../../entities/courses';
-import { take } from 'rxjs';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
+
+import Course from '../../../../../entities/courses';
 
 @Component({
   selector: 'app-card-actions',
@@ -11,11 +10,9 @@ import { Router } from '@angular/router';
 })
 export class CardActionsComponent {
   @Input() public course!: Course;
+
   @Output() public onReload = new EventEmitter<void>();
+  @Output() public onDownload = new EventEmitter<string>();
 
   constructor(private router: Router) {}
-
-  public onDownloadData() {
-    this.router.navigate([`/home`, this.course.id]);
-  }
 }

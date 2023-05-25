@@ -11,8 +11,20 @@ import CoursesService from 'src/app/services/courses-service/courses.service';
 export class HomeComponent implements OnInit {
   public courses: Course[] = [];
   public loading = true;
+  public isDownloadModalOpen = false;
+  public selectedCourseId = '';
 
   constructor(private coursesService: CoursesService) {}
+
+  public onDownload(courseId: string): void {
+    this.selectedCourseId = courseId;
+    this.isDownloadModalOpen = true;
+  }
+
+  public onCloseDownloadModal(): void {
+    this.selectedCourseId = '';
+    this.isDownloadModalOpen = false;
+  }
 
   public ngOnInit(): void {
     this.coursesService
