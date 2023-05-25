@@ -38,7 +38,7 @@ export default class VideoDownloaderService {
     const manifest = await this.getVideoManifestURL(videoInfos);
     const videoPath = path.join(folderPath, fileName);
     await this.callDownloadScript(manifest, videoPath);
-    this.logger.success(`Download de ${videoInfos.titulo} concluido`);
+    this.logger.success(`Download de ${fileName} concluido`);
   }
 
   private async getVideoInfos(): Promise<VideoInfos> {

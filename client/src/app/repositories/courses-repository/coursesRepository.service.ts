@@ -29,7 +29,7 @@ export default class CoursesRepository {
 
   public getCourseLinks(courseId: string) {
     return this.http.get(
-      `${API_PATH}/courses/${courseId}/downloadContent`
+      `${API_PATH}/courses/${courseId}/links`
     ) as CourseLinksReponse;
   }
 

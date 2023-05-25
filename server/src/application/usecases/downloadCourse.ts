@@ -7,11 +7,12 @@ import VideoDownloaderService from "../../scripts/video-downloader/videoDownload
 import DownloadQuestionarioUsecase from "./downloadQuestionario";
 import GetCourseByIdUsecase from "./getCourseById";
 import { Logger } from "../../infra/logger/logger";
-import GetCourseLinksUsecase from "./getCourseLinks";
-import { CoursePageLink } from '../../../../entities/courseLinks';
+import {
+  CoursePageLink,
+  GetCourseLinksOutput,
+} from "../../../../entities/courseLinks";
 
 export default class DownloadCourseUsecase {
-  private getCourseLinksUsecase = new GetCourseLinksUsecase();
   private getCourseByIdUsecase = new GetCourseByIdUsecase();
   private downloadQuestionarioUsecase: DownloadQuestionarioUsecase;
   private pdfDownloader: PdfDownloaderService;
@@ -29,40 +30,64 @@ export default class DownloadCourseUsecase {
     this.videoDownloader = new VideoDownloaderService(logger);
   }
 
-  public async execute(courseId: string): Promise<void> {
+  public async execute(
+    courseId: string,
+    links: GetCourseLinksOutput
+  ): Promise<void> {
     this.courseInfos = await this.getCourseByIdUsecase.execute(courseId);
-    const links = await this.getCourseLinksUsecase.execute(courseId);
-    this.createDonwloadDirectory();
-    // await Promise.allSettled(
-    //   links.map(async (link) => {
-    //     await this.downloadContent(link);
-    //   })
-    // );
+    const unidades = Object.keys(links);
+    await this.createDonwloadDirectory(unidades);
+    for await (let u of unidades) {
+      await Promise.all(
+        links[u].map((link) => {
+          const folderPath = path.join(this.dirPath, u.replace(/ /g, "_"));
+          return this.downloadContent(link, folderPath);
+        })
+      );
+    }
     this.logger.success(`O curso ${this.courseInfos.name} foi baixado`);
   }
 
-  private createDonwloadDirectory() {
-    const newDirName = this.courseInfos.name.replace(/ /g, "_");
-    this.dirPath = path.join(this.downloadsDirPath, newDirName);
-    fs.mkdir(this.dirPath, (err) => {
-      if (err) throw new Error("Erro ao criar o diretorio");
-      this.logger.success(`O diretório '${newDirName}' foi criado`);
-    });
+  private async createDonwloadDirectory(unidades: string[]) {
+    const newDirName = this.courseInfos.name;
+    this.dirPath = path
+      .join(this.downloadsDirPath, newDirName)
+      .replace(/ /g, "_");
+    await this.createFolder(newDirName, this.dirPath);
+    for await (let folder of unidades) {
+      const folderPath = path.join(this.dirPath, folder).replace(/ /g, "_");
+      await this.createFolder(folder, folderPath);
+    }
   }
 
-  private async downloadContent(link: CoursePageLink): Promise<void> {
+  private async createFolder(
+    folderName: string,
+    dirPath: string
+  ): Promise<void> {
+    try {
+      await fs.promises.mkdir(dirPath);
+      this.logger.success(`O diretório '${folderName}' foi criado`);
+    } catch (err) {
+      throw new Error("Erro ao criar o diretório");
+    }
+  }
+
+  private async downloadContent(
+    link: CoursePageLink,
+    folderPath: string
+  ): Promise<void> {
     if (link.format === "PDF") {
-      await this.pdfDownloader.download(link.url, link.name, this.dirPath);
+      await this.pdfDownloader.download(link.url, link.name, folderPath);
     }
     if (link.format === "HTML") {
       await this.downloadQuestionarioUsecase.execute(
         link.url,
         link.name,
-        this.dirPath
+        folderPath
       );
     }
     if (link.format === "MP4") {
-      await this.videoDownloader.download(link.url, link.name, this.dirPath);
+      await this.videoDownloader.download(link.url, link.name, folderPath);
     }
     // throw new Error("Not Implemented!");
   }

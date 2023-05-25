@@ -7,12 +7,13 @@ import DownloadCourseUsecase from "../application/usecases/downloadCourse";
 import { Logger } from "../infra/logger/logger";
 import GetCourseLinksUsecase from "../application/usecases/getCourseLinks";
 import GetCourseByIdUsecase from "../application/usecases/getCourseById";
+import { GetCourseLinksOutput } from "../../../entities/courseLinks";
 
 export default class CoursesController {
   private getCoursesUsecase = new GetCoursesUsecase();
   private getGradesFromCourseUsecase = new GetGradesFromCourseUsecase();
-  private getCourseLinks = new GetCourseLinksUsecase();
-  private getCourseById = new GetCourseByIdUsecase();
+  private getCourseLinksUsecase = new GetCourseLinksUsecase();
+  private getCourseByIdUsecase = new GetCourseByIdUsecase();
   private downloadCourseUsecase: DownloadCourseUsecase;
 
   constructor(private logger: Logger) {
@@ -47,19 +48,20 @@ export default class CoursesController {
   public downloadData = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      await this.downloadCourseUsecase.execute(id);
+      const data = req.body as GetCourseLinksOutput;
+      await this.downloadCourseUsecase.execute(id, data);
       return res.status(200).json({ msg: "Download completed!" });
     } catch (error) {
       return errorHandler(res, error);
     }
   };
 
-  public getDownloadContent = async (req: Request, res: Response) => {
+  public getCourseLinks = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
       const [course, links] = await Promise.all([
-        this.getCourseById.execute(id),
-        this.getCourseLinks.execute(id),
+        this.getCourseByIdUsecase.execute(id),
+        this.getCourseLinksUsecase.execute(id),
       ]);
       return res.json({
         msg: `returning avaliable downloads for course ${id}`,

@@ -18,11 +18,11 @@ export default class CourseRouter {
       coursesController.getGrades
     );
     router.get(
-      "/courses/:id/downloadContent",
+      "/courses/:id/links",
       cookieSetterMiddleware,
-      coursesController.getDownloadContent
+      coursesController.getCourseLinks
     );
-    router.get(
+    router.post(
       "/courses/:id/download",
       cookieSetterMiddleware,
       coursesController.downloadData
