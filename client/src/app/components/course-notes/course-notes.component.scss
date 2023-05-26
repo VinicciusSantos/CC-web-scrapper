@@ -5,30 +5,9 @@
 }
 
 table {
-  width: 100%;
-  height: min-content;
-  text-align: center;
-  overflow: hidden;
-  border-collapse: separate;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  margin-top: 10px;
-
-  td {
-    padding: 5px;
-    font-weight: normal;
-  }
-
-  th {
+  tr:last-child td {
     font-weight: bold;
-    text-align: center;
-    padding: 5px;
-    background-color: #dde7ff;
-  }
-
-  tr:nth-of-type(odd) {
-    background-color: #92aeec23;
+    background-color: #e6edff;
   }
 
   td.nb-column-item {
@@ -42,11 +21,6 @@ table {
 
   th.nb-column-concluido {
     width: 100px;
-  }
-
-  tr:last-child td {
-    font-weight: bold;
-    background-color: #e6edff;
   }
 }
 

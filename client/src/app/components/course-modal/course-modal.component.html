@@ -12,7 +12,19 @@
     "
   >
     <ng-container *ngIf="!modalConfig.loading">
-      <h2>{{ course.name }}</h2>
+      <div class="course-modal__title">
+        <nb-icon class="book-icon" icon="book" status="primary"></nb-icon>
+        <h2>{{ course.name }}</h2>
+        <button
+          class="close-button"
+          nbButton
+          shape="round"
+          size="tiny"
+          (click)="onCloseModal()"
+        >
+          <nb-icon icon="close" status="primary"></nb-icon>
+        </button>
+      </div>
       <ul class="course-modal__unidades-list">
         <li
           *ngFor="let unidade of formmatedLinks"
@@ -40,11 +52,17 @@
           </table>
         </li>
         <footer>
-          <button nbButton outline status="danger" size="small" (click)="onCloseModal()">
+          <button nbButton status="basic" size="small" (click)="onCloseModal()">
             <nb-icon icon="slash-outline"></nb-icon>
             Cancelar
           </button>
-          <button nbButton size="small" hero status="info" (click)="onSubmit()">
+          <button
+            nbButton
+            size="small"
+            hero
+            status="primary"
+            (click)="onSubmit()"
+          >
             <nb-icon icon="download-outline"></nb-icon>
             Download
           </button>

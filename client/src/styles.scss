@@ -32,3 +32,31 @@
 ::-webkit-scrollbar-track:hover {
   background-color: #bbd1ff;
 }
+
+table {
+  width: 100% !important;
+  height: min-content !important;
+  text-align: center !important;
+  overflow: hidden !important;
+  border-collapse: separate !important;
+  -webkit-border-radius: 10px !important;
+  -moz-border-radius: 10px !important;
+  border-radius: 10px !important;
+  margin-top: 10px !important;
+
+  td {
+    padding: 5px !important;
+    font-weight: normal !important;
+  }
+
+  th {
+    font-weight: bold !important;
+    text-align: center !important;
+    padding: 5px !important;
+    background-color: #dde7ff !important;
+  }
+
+  tr:nth-of-type(odd) {
+    background-color: #92aeec23 !important;
+  }
+}

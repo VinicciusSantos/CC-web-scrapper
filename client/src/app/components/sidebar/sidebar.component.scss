@@ -36,6 +36,11 @@
     border: none;
     cursor: pointer;
 
+    ::ng-deep svg {
+      fill: #92afec;
+      padding: 1px;
+    }
+
     &:hover {
       background-color: #eff4ff !important;
     }
