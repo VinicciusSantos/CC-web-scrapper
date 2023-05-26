@@ -1,19 +1,38 @@
 :host {
   display: flex;
   overflow-y: hidden;
+  width: 100%;
 }
 
 .home-page {
   &__container {
-    background-color: #92aeec25;
-    width: 100vw;
-    padding: 20px;
+    background-color: #92aeec25 !important;
+    width: inherit;
+    padding: 0 40px 40px 20px;
     height: 100vh;
     margin-bottom: 20px;
+    margin-left: 15px;
     overflow: hidden scroll;
 
-    h2 {
-      margin-bottom: 20px;
+    header {
+      background-color: rgba(255, 255, 255, 0.774);
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.025);
+      padding: 1px 20px 20px 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+
+      h1 {
+        font-size: 43px;
+        margin: 25px 0 0;
+      }
+
+      > span {
+        color: #4b7de7;
+      }
+
+      nb-form-field {
+        margin-top: 10px;
+      }
     }
   }
 

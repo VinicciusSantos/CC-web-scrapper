@@ -1,14 +1,43 @@
 <app-sidebar></app-sidebar>
 <div class="home-page__container">
-  <p *ngIf="loading">loading...</p>
+  <p *ngIf="loading; else loadedBody">loading...</p>
 
-  <div class="home-page__courses-container">
-    <app-course-card
-      *ngFor="let course of courses"
-      [course]="course"
-      (onDownload)="onDownload($event)"
-    ></app-course-card>
-  </div>
+  <ng-template #loadedBody>
+    <header>
+      <h1>Disciplinas disponíveis</h1>
+
+      <span *ngIf="filteredCourses.length !== courses.length; else fullCourses">
+        exibindo <strong>{{ filteredCourses.length }}</strong> de
+        <strong>{{ courses.length }}</strong> cursos
+      </span>
+
+      <ng-template #fullCourses>
+        <span>
+          exibindo <strong>{{ courses.length }}</strong> cursos
+        </span>
+      </ng-template>
+
+      <nb-form-field>
+        <nb-icon nbPrefix icon="search" pack="eva"></nb-icon>
+        <input
+          [(ngModel)]="searchValue"
+          (ngModelChange)="onSearch()"
+          type="text"
+          placeholder="buscar curso"
+          nbInput
+          shape="semi-round"
+        />
+      </nb-form-field>
+    </header>
+
+    <div class="home-page__courses-container">
+      <app-course-card
+        *ngFor="let course of filteredCourses"
+        [course]="course"
+        (onDownload)="onDownload($event)"
+      ></app-course-card>
+    </div>
+  </ng-template>
 </div>
 
 <app-course-modal

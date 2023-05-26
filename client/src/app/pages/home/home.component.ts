@@ -10,6 +10,8 @@ import CoursesService from 'src/app/services/courses-service/courses.service';
 })
 export class HomeComponent implements OnInit {
   public courses: Course[] = [];
+  public filteredCourses: Course[] = [];
+  public searchValue: string = '';
   public loading = true;
   public isDownloadModalOpen = false;
   public selectedCourseId = '';
@@ -26,6 +28,12 @@ export class HomeComponent implements OnInit {
     this.isDownloadModalOpen = false;
   }
 
+  public onSearch(): void {
+    this.filteredCourses = this.courses.filter((course) =>
+      course.name.toLowerCase().includes(this.searchValue.toLowerCase())
+    );
+  }
+
   public ngOnInit(): void {
     this.coursesService
       .getAllCourses()
@@ -40,6 +48,7 @@ export class HomeComponent implements OnInit {
         this.courses = res.data.courses.map(
           (c) => new Course(c.fullName, c.url)
         );
+        this.filteredCourses = this.courses;
       });
   }
 }
