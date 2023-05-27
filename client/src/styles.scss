@@ -1,11 +1,11 @@
-@use 'themes' as *;
+@use "themes" as *;
 
-@use '@nebular/theme/styles/globals' as *;
+@use "@nebular/theme/styles/globals" as *;
 
 @include nb-install() {
   @include nb-theme-global();
-};
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
+}
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
 
 * {
   padding: 0;
@@ -61,3 +61,14 @@ table {
     background-color: #92aeec23 !important;
   }
 }
+
+nb-spinner {
+  background: #92aeec18 !important;
+  backdrop-filter: blur(3px) !important;
+
+  span {
+    border-top-color: #4b7de7 !important;
+    border-bottom-color: #4b7de7 !important;
+    border-left-color: #4b7de7 !important;
+  }
+} 
