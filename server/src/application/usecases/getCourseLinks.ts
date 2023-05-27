@@ -3,9 +3,9 @@ import cheerio from "cheerio";
 import {
   CoursePageLink,
   GetCourseLinksOutput,
-} from "../../../../entities/courseLinks";
-import Link from "../../../../entities/Link";
-import { Pages } from "../../../../entities/pages";
+} from "../../entities/courseLinks";
+import Link from "../../entities/Link";
+import { Pages } from "../../entities/pages";
 import { AxiosInstance } from "../../infra/http/axios";
 
 export default class GetCourseLinksUsecase {

@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import Course from "../../../../entities/courses";
+import Course from "../../entities/courses";
 import PdfDownloaderService from "../../scripts/pdf-downloader/pdfDownloader";
 import VideoDownloaderService from "../../scripts/video-downloader/videoDownloader";
 import DownloadQuestionarioUsecase from "./downloadQuestionario";
@@ -10,7 +10,7 @@ import { Logger } from "../../infra/logger/logger";
 import {
   CoursePageLink,
   GetCourseLinksOutput,
-} from "../../../../entities/courseLinks";
+} from "../../entities/courseLinks";
 
 export default class DownloadCourseUsecase {
   private getCourseByIdUsecase = new GetCourseByIdUsecase();
@@ -19,10 +19,7 @@ export default class DownloadCourseUsecase {
   private videoDownloader: VideoDownloaderService;
   private courseInfos!: Course;
   private dirPath!: string;
-  private downloadsDirPath = path.join(
-    __dirname,
-    "../../../../public/downloads/"
-  );
+  private downloadsDirPath = path.join(__dirname, "../../../public/downloads/");
 
   constructor(private logger: Logger) {
     this.downloadQuestionarioUsecase = new DownloadQuestionarioUsecase(logger);

@@ -14,7 +14,7 @@ function deleteFolderRecursive(dirPath: string) {
 }
 
 export default function clearPublicFolder(logger: Logger) {
-  const dirPath = path.join(__dirname, "../../../../public/downloads");
+  const dirPath = path.join(__dirname, "../../../public/downloads");
   deleteFolderRecursive(dirPath);
   fs.mkdirSync(dirPath);
   logger.info("Public folder has been cleaned");

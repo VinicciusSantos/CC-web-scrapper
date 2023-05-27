@@ -1,5 +1,5 @@
 import axios from "axios";
-import { UNIP_BASE_URL } from "../../../../entities/pages";
+import { UNIP_BASE_URL } from "../../entities/pages";
 import cheerio from "cheerio";
 import NotAuthorizedError from "../../application/errors/notAuthorized";
 import isInLoginPage from "../../utils/isInLoginPage";

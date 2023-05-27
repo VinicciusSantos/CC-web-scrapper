@@ -7,7 +7,7 @@ import DownloadCourseUsecase from "../application/usecases/downloadCourse";
 import { Logger } from "../infra/logger/logger";
 import GetCourseLinksUsecase from "../application/usecases/getCourseLinks";
 import GetCourseByIdUsecase from "../application/usecases/getCourseById";
-import { GetCourseLinksOutput } from "../../../entities/courseLinks";
+import { GetCourseLinksOutput } from "../entities/courseLinks";
 
 export default class CoursesController {
   private getCoursesUsecase = new GetCoursesUsecase();

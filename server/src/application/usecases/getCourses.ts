@@ -1,7 +1,7 @@
 import cheerio from "cheerio";
 
-import Course from "../../../../entities/courses";
-import { Pages } from "../../../../entities/pages";
+import Course from "../../entities/courses";
+import { Pages } from "../../entities/pages";
 import { AxiosInstance } from "../../infra/http/axios";
 import NotAuthorizedError from "../errors/notAuthorized";
 

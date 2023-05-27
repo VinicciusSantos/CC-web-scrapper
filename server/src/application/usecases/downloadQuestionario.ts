@@ -1,4 +1,4 @@
-import { UNIP_BASE_URL } from "../../../../entities/pages";
+import { UNIP_BASE_URL } from "../../entities/pages";
 import { AxiosInstance } from "../../infra/http/axios";
 import { Logger } from "../../infra/logger/logger";
 import PageDownloaderService from "../../scripts/page-downloader/pageDownloader";

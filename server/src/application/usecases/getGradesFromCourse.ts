@@ -1,7 +1,7 @@
 import cheerio from "cheerio";
 import { AxiosInstance } from "../../infra/http/axios";
-import { NotesTableRow } from "../../../../entities/notes";
-import { Pages } from "../../../../entities/pages";
+import { NotesTableRow } from "../../entities/notes";
+import { Pages } from "../../entities/pages";
 
 export default class GetGradesFromCourseUsecase {
   constructor() {}

@@ -2,7 +2,7 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { execFile } from "child_process";
 import path from "path";
 
-import URL from "../../../../entities/URL";
+import URL from "../../entities/URL";
 import { AxiosInstance } from "../../infra/http/axios";
 import { VideoInfos, VideoSectionInfos } from "./interfaces";
 import { Logger } from "../../infra/logger/logger";

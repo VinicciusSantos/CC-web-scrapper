@@ -1,5 +1,5 @@
-import Course from "../../../../entities/courses";
-import { Pages } from "../../../../entities/pages";
+import Course from "../../entities/courses";
+import { Pages } from "../../entities/pages";
 import { AxiosInstance } from "../../infra/http/axios";
 import cheerio from "cheerio";
 
