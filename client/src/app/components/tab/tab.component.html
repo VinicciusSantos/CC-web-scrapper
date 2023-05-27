@@ -1,0 +1,7 @@
+<button
+  [class]="'app-tab app-tab-' + size"
+  data-testid="app-tab"
+  [ngClass]="{ 'app-tab-active': active }">
+  <nb-icon [icon]="icon"></nb-icon>
+  <span class="tab-label">{{ label | titlecase }}</span>
+</button>

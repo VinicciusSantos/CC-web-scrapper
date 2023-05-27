@@ -15,6 +15,7 @@ import { CourseModalComponent } from './course-modal/course-modal.component';
 import { CourseNotesComponent } from './course-notes/course-notes.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DirectivesModule } from '../directives/directives.module';
+import { TabComponent } from './tab/tab.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { DirectivesModule } from '../directives/directives.module';
     CourseModalComponent,
     CourseNotesComponent,
     SidebarComponent,
+    TabComponent,
   ],
   imports: [
     CommonModule,

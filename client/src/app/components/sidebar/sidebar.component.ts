@@ -1,13 +1,12 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { TabProps } from '../tab/tab.component';
 // import { StudentEntity } from 'src/app/domain/entities';
 
 // import { KeyboardAction } from './../../infra/services/keyboard-service/KeyboardService';
-// import { StudyTabProps } from './../tab/tab.component';
 
-/* eslint-disable @angular-eslint/component-selector */
 export type SidebarState = 'closed' | 'open';
-// export type TabInput = Omit<StudyTabProps, 'active' | 'size'>;
+export type TabInput = Omit<TabProps, 'active' | 'size'>;
 
 @Component({
   selector: 'app-sidebar',
@@ -17,7 +16,13 @@ export type SidebarState = 'closed' | 'open';
 export class SidebarComponent implements OnInit, OnDestroy {
   @Input() title = 'UNIP Web Scrapper';
   @Input() state: SidebarState = 'open';
-  // @Input() tabs: TabInput[] = [];
+  @Input() tabs: TabInput[] = [
+    {
+      icon: 'home',
+      label: 'Home',
+      redirectTo: '/home',
+    },
+  ];
 
   // public user!: StudentEntity;
 
@@ -28,14 +33,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
     return this.state === 'open';
   }
 
-  // public get tabSize(): StudyTabProps['size'] {
-  //   if (this.isSidebarOpen) return 'full';
-  //   return 'small';
-  // }
+  public get tabSize(): TabProps['size'] {
+    if (this.isSidebarOpen) return 'full';
+    return 'small';
+  }
 
-  // public isTabActive(tabRoute: string): boolean {
-  //   return tabRoute === this.router.url;
-  // }
+  public isTabActive(tabRoute: string): boolean {
+    return tabRoute === this.router.url;
+  }
 
   public changeSidebarState = () => {
     if (this.isSidebarOpen) this.state = 'closed';

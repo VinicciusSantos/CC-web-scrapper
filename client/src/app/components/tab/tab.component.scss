@@ -1,0 +1,46 @@
+.app-tab {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    gap: 10px;
+    cursor: pointer;
+    border: 0;
+    padding: 15px 20px;
+    padding-left: 30px;
+    background-color: #5e73a01a;
+  
+    .tab-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    ::ng-deep svg {
+        fill: #222b45;
+    }
+  
+    &:hover {
+        background-color: #5e73a023 !important;
+    }
+  }
+  
+  .app-tab-full {
+    width: 350px;
+  }
+  
+  .app-tab-small {
+    padding: 8px;
+    border-radius: 8px;
+  
+    .tab-label {
+      display: none;
+    }
+  }
+  
+  .app-tab-active {
+    background-color: #5e73a054;
+  
+    &:hover {
+      background-color: #5e73a064 !important;
+    }
+  }
