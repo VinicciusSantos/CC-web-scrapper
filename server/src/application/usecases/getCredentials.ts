@@ -31,6 +31,8 @@ export default class GetCredentialsUsecase {
   private async configureWebDriver(): Promise<WebDriver> {
     const options = new ChromeOptions();
     options.addArguments("--headless");
+    options.addArguments('--no-sandbox')
+    options.addArguments('--disable-dev-shm-usage')      
     const builder = new Builder()
       .forBrowser("chrome")
       .setChromeOptions(options)
