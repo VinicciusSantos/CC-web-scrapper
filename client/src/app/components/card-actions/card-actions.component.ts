@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
-import Course from '../../../../../entities/courses';
+import Course from '../../domain/entities/courses';
 
 @Component({
   selector: 'app-card-actions',

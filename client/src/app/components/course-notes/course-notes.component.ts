@@ -3,8 +3,8 @@ import {
   NbTreeGridDataSource,
   NbTreeGridDataSourceBuilder,
 } from '@nebular/theme';
-import { NotesTableRow } from '../../../../../entities/notes';
-import Course from '../../../../../entities/courses';
+import { NotesTableRow } from '../../domain/entities/notes';
+import Course from '../../domain/entities/courses';
 import { finalize, take } from 'rxjs';
 import CoursesService from '../../services/courses-service/courses.service';
 

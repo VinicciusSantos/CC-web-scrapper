@@ -8,8 +8,8 @@ import {
 import { finalize, take } from 'rxjs';
 import CoursesService from 'src/app/services/courses-service/courses.service';
 
-import { CoursePageLink } from '../../../../../entities/courseLinks';
-import Course from '../../../../../entities/courses';
+import { CoursePageLink } from '../../domain/entities/courseLinks';
+import Course from '../../domain/entities/courses';
 
 interface ModalConfig {
   loading: boolean;
@@ -101,7 +101,8 @@ export class CourseModalComponent implements OnChanges {
     });
     this.coursesService
       .downloadCourseData(this.course.id, this.submitValue)
-      .pipe(take(1));
+      .pipe(take(1))
+      .subscribe((res) => {});
     this.onCloseModal();
   }
 

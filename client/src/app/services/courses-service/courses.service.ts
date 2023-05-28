@@ -1,4 +1,4 @@
-import { GetCourseLinksOutput } from '../../../../../entities/courseLinks';
+import { GetCourseLinksOutput } from '../../domain/entities/courseLinks';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
@@ -7,7 +7,7 @@ import {
   GetAllCoursesReponse,
   GetCourseGradesReponse,
 } from './interfaces';
-import Course from '../../../../../entities/courses';
+import Course from '../../domain/entities/courses';
 
 export const API_PATH = 'http://localhost:3000';
 

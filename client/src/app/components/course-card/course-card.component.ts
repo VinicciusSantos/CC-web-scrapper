@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import Course from '../../../../../entities/courses';
+import Course from '../../domain/entities/courses';
 import { CourseNotesComponent } from '../course-notes/course-notes.component';
 
 @Component({

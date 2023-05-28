@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
-import Course from '../../../../../entities/courses';
+import Course from '../../domain/entities/courses';
 import { ResponseInterfaces } from 'src/app/infra/http/interfaces';
-import { NotesTableRow } from '../../../../../entities/notes';
-import { CoursePageLink, GetCourseLinksOutput } from '../../../../../entities/courseLinks';
+import { NotesTableRow } from '../../domain/entities/notes';
+import { CoursePageLink, GetCourseLinksOutput } from '../../domain/entities/courseLinks';
 
 export namespace CourseInterfaces {
   export class getAll {

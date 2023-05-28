@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, finalize, of, take } from 'rxjs';
-import Course from '../../../../../entities/courses';
+import Course from '../../domain/entities/courses';
 import CoursesService from 'src/app/services/courses-service/courses.service';
 
 @Component({
