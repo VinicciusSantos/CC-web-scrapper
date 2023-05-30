@@ -2,7 +2,8 @@ FROM node:18
 
 # Instalar o Chromium, o Chromium WebDriver e o ffmpeg
 RUN apt-get update \
-    && apt-get install -y chromium chromium-driver ffmpeg
+    && apt-get install -y chromium chromium-driver \
+    && apt-get install -y ffmpeg
 
 WORKDIR /usr/src/server
 
