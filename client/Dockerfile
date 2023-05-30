@@ -2,7 +2,7 @@ FROM node:14
 
 RUN npm install -g @angular/cli 
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/client
 
 COPY package.json .
 

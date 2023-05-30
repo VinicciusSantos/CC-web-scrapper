@@ -19,7 +19,7 @@ export default class DownloadCourseUsecase {
   private videoDownloader: VideoDownloaderService;
   private courseInfos!: Course;
   private dirPath!: string;
-  private downloadsDirPath = path.join(__dirname, "../../../public/downloads/");
+  private downloadsDirPath = path.join(__dirname, "../../../public/downloads");
 
   constructor(private logger: Logger) {
     this.downloadQuestionarioUsecase = new DownloadQuestionarioUsecase(logger);

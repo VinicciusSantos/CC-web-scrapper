@@ -2,7 +2,6 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import RouterConfig from "./infra/router";
-import clearPublicFolder from "./scripts/public-folder-cleaner/PublicFolderCleaner";
 import { Logger } from "./infra/logger/logger";
 import ConsoleLogger from "./infra/logger/consoleLogger";
 
@@ -11,7 +10,6 @@ export class App {
   public logger = new ConsoleLogger();
 
   constructor() {
-    clearPublicFolder(this.logger);
     this.server = express();
     this.middleware();
     new RouterConfig(this.server, this.logger);
