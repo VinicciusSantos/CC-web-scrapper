@@ -22,7 +22,7 @@
       margin: 20px 0;
 
       h1 {
-        font-size: 43px;
+        font-size: 40px;
         margin: 25px 0 0;
       }
 
@@ -40,15 +40,15 @@
     display: grid;
     gap: 15px;
 
-    @media screen and (min-width: 1570px) {
+    @media screen and (min-width: 1490px) {
       grid-template-columns: repeat(3, 1fr);
     }
 
-    @media screen and (max-width: 1570px) {
+    @media screen and (max-width: 1490px) {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    @media screen and (max-width: 1190px) {
+    @media screen and (max-width: 1110px) {
       grid-template-columns: repeat(1, 1fr);
     }
   }
