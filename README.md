@@ -8,7 +8,8 @@
 ![Cheerio](https://img.shields.io/badge/-Cheerio-%23E33332?style=for-the-badge)
 ![Selenium](https://img.shields.io/badge/-selenium-%43B02A?style=for-the-badge&logo=selenium&logoColor=white)
 
-Programa para baixar automaticamente todos os arquivos disponíveis na plataforma online da faculdade UNIP (Universidade Paulista). Este código foi desenvolvido para facilitar o processo de obtenção de materiais de estudo, como slides, apostilas, exercícios, entre outros, disponibilizados pelos professores no sistema online da UNIP.
+Programa para uso pessoal com finalidade de fazer o download automaticamente de todos os arquivos disponíveis na plataforma online da faculdade. Este código foi desenvolvido para facilitar o processo de obtenção de materiais de estudo, como slides, apostilas, exercícios, entre outros, disponibilizados pelos professores no sistema online da universidade.
+
 
 ## Funcionalidades
 O UNIP Web Scraper possui as seguintes funcionalidades:
@@ -18,8 +19,32 @@ O UNIP Web Scraper possui as seguintes funcionalidades:
 - Organizar os arquivos baixados em pastas de acordo com a estrutura da plataforma UNIP.
 
 
-# Instruções para pré-instalação
-1. Instale o chromium web-driver
+## Navegando pelo sistema
+
+### Tela principal
+São exibidos todos os cursos que o usuário possui juntamente com suas respectivas notas em questionários, atividades e avaliações.
+![homet](./docs/assets/layout-v2__home.png)
+
+### Modal de Download
+Permite ver todos os materias diponíveis na plataforma, incluindo vídeos, PDFs e páginas de questionários e atividades.
+![modal](./docs/assets/layout-v2__modal.png)
+
+Ao fazer download, os arquivos serão encontrados em `C:/UNIP-Web-Scrapper` na seguinte estrutura
+![downloads](./docs/assets/dowloads_structure.png)
+
+### Tela de login
+São apresentados os campos de matricula e senha para fazer login no sistema.
+OBS: as credenciais usadas para fazer login no sistema são as mesmas cadastradas no sistema da universidade
+![homet](./docs/assets/layout-v2__login.png)
+
+## Instruções para execução do projeto
+
+1. Inicialize os containers
 ```bash
-sudo apt install chromium-chromedriver
+docker-compose up
 ```
+
+2. acesse a URL no navegador
+```
+localhost:4200
+````
