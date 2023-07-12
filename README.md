@@ -4,6 +4,9 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Cheerio](https://img.shields.io/badge/-Cheerio-%23E33332?style=for-the-badge)
+![Selenium](https://img.shields.io/badge/-selenium-%43B02A?style=for-the-badge&logo=selenium&logoColor=white)
 
 Programa para baixar automaticamente todos os arquivos disponíveis na plataforma online da faculdade UNIP (Universidade Paulista). Este código foi desenvolvido para facilitar o processo de obtenção de materiais de estudo, como slides, apostilas, exercícios, entre outros, disponibilizados pelos professores no sistema online da UNIP.
 
